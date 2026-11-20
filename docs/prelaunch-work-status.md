@@ -37,7 +37,7 @@ The audit branch was merged into `main` by PR #3 (`ab54c88`).
 | P2 | CSMS planned-service draft | Completed; remains `draft: true` |
 | P3 | Site identity / `site.ts` SSOT audit | Audit completed; code replacement blocked on confirmed company details |
 | P4 | Service taxonomy design and implementation | Completed; 12 bilingual category pairs and reference validation merged and locally validated |
-| P5 | ISO service/scheme catalog | Planning shortlist exists; TNCV authority/scope/partner evidence must be confirmed |
+| P5 | ISO service/scheme catalog | Internal 12-item planned catalog and build-time validation implemented; editions and TNCV scope remain unverified |
 | P6 | Article-to-service relationships | Architecture exists; requires canonical service records and editorial mapping |
 | P7 | Service SEO and structured data | Shared SEO/JSON-LD helpers exist; verify against approved canonical service data |
 | P8 | Full quality gate | Local checks passed on pinned toolchain; deployment runtime verification still pending |
@@ -54,7 +54,7 @@ The audit branch was merged into `main` by PR #3 (`ab54c88`).
 - Current repository runtime policy pins Node.js `26.13.1` in `.node-version` / `.nvmrc`, with `package.json` engine `>=26.13.1 <27`; pnpm is `12.21.0`.
 - Current TypeScript is `7.1.0-beta`; TypeScript 6.x is prohibited by repository policy. This is a beta exception, not a stable release.
 - `categoryIds` values now use canonical stable slugs. Legacy `kualitas` and `organisasi` references were removed during integration.
-- No GitHub Actions workflow or verifiable automated build result exists in the repository.
+- GitHub Actions workflow `.github/workflows/quality.yml` is introduced on the current P5 branch; it must pass after the branch is pushed/opened as a PR.
 
 ## External confirmations needed
 
@@ -86,3 +86,14 @@ Local full validation ran on `main` at `a68b53b` with the pinned Node.js `26.13.
 | `npm run test` | PASS, exit `0`, 14 tests |
 
 No GitHub Actions workflow or verifiable automated build result is present in this repository. Build success is recorded from local execution on the pinned toolchain, not from CI. Non-fatal warnings remain for bilingual category records sharing one slug across languages and for empty content collections.
+
+
+## Current branch work — P5 and CI
+
+Branch: `feat/certification-scheme-catalog-ci`
+
+- Added 12 internal candidate scheme records in `src/data/certification-schemes.ts`; all remain `planned`, with edition values intentionally unset pending official verification.
+- Added cross-reference validation and tests for duplicate identifiers/designations, category references and active-scheme edition requirements.
+- Integrated scheme validation into the existing build-time content gate.
+- Added `.github/workflows/quality.yml` to run `pnpm check`, `pnpm lint`, `pnpm test` and `pnpm build` on pull requests to `main` and pushes to `main`.
+- No local install, test, lint, typecheck or build has been run by the assistant. Wait for GitHub Actions or a user-run build before merging.
