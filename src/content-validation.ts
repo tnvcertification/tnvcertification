@@ -11,6 +11,8 @@ import { readFileSync } from "node:fs";
 import { parse as parseYaml } from "yaml";
 import { validateAllEntries, type ContentEntryLike } from "./lib/content-validation";
 import { validateTaxonomy, type TaxonomyRecordLike } from "./lib/taxonomy-validation";
+import { certificationSchemes } from "./data/certification-schemes";
+import { validateCertificationSchemes } from "./lib/certification-scheme-validation";
 import { collectionRegistry, editorialCollections } from "./data/collections";
 
 function readFrontmatter(filePath: string): FrontmatterPayload | null {
@@ -73,16 +75,23 @@ export const contentValidationIntegration = {
   hooks: {
     "astro:build:done": async () => {
       const contentEntries = loadContentEntries();
+      const categories = loadCategoryEntries();
       const diagnostics = [
         ...validateAllEntries(contentEntries),
-        ...validateTaxonomy(loadCategoryEntries(), contentEntries),
+        ...validateTaxonomy(categories, contentEntries),
       ];
-      if (diagnostics.length > 0) {
+      const schemeDiagnostics = validateCertificationSchemes(
+        certificationSchemes,
+        categories.map((category) => String(category.data.slug ?? "")),
+      );
+      if (diagnostics.length > 0 || schemeDiagnostics.length > 0) {
+        const totalIssues = diagnostics.length + schemeDiagnostics.length;
         const lines = [
-          `Content validation failed with ${diagnostics.length} issue(s):`,
+          `Content validation failed with ${totalIssues} issue(s):`,
           ...diagnostics.map((d) => `  [${d.rule}] ${d.path} → ${d.field}: ${d.reason}`),
+          ...schemeDiagnostics.map((d) => `  [${d.rule}] scheme:${d.schemeId} → ${d.field}: ${d.reason}`),
           "",
-          "Fix the content and taxonomy references before building again.",
+          "Fix the content, taxonomy and certification-scheme references before building again.",
         ];
         throw new Error(lines.join("\n"));
       }
