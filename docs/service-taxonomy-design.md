@@ -122,3 +122,12 @@ CSMS here means **Contractor Safety Management System**, not the automotive cybe
 - It does not create accreditation or authorization claims.
 - It does not convert CSMS into an ISO certification.
 - It does not change production routes, page content or navigation.
+
+
+## 9. P5 certification scheme catalog implementation
+
+The internal candidate catalog is maintained in `src/data/certification-schemes.ts`. It contains the 12 standards listed above, each with a stable ID, designation, title, category slug, `planned` status and a verification note.
+
+Edition values are deliberately `null` for now. The catalog does not assert current editions, TNCV accreditation, authorization, or that these schemes are commercially available. Confirm each item against the official standards publisher and the applicable accreditation/authorization scope before completing edition metadata or changing status to `active`.
+
+The catalog is not wired to public routes or SEO output. It is a planning data source only. Build-time validation in `src/lib/certification-scheme-validation.ts` checks unique IDs/designations, category references, and prevents an active scheme without a verified edition. CSMS remains a separate planned Contractor Safety service concept, not an ISO standard and not an entry in this ISO shortlist.
