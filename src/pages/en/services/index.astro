@@ -1,0 +1,39 @@
+---
+import WidePageLayout from "../../../layouts/WidePageLayout.astro";
+import MainMenuHero from "../../../components/MainMenuHero.astro";
+import ServiceCard from "../../../components/ServiceCard.astro";
+import Section from "../../../components/Section.astro";
+import { getPublishedServices, serviceIndexPath, servicePath } from "../../../data/services";
+import { siteSettings } from "../../../site";
+import { serviceIndexJsonLd } from "../../../lib/structured-data";
+const services = await getPublishedServices("en");
+const structuredData = serviceIndexJsonLd(
+  services.map((service) => ({
+    name: service.data.title,
+    description: service.data.metaDescription,
+    path: servicePath(service.data),
+  })),
+);
+---
+<WidePageLayout title={`Services | ${siteSettings.title}`} description="Certification, audit, and conformity assessment services." canonical={serviceIndexPath("en")} lang="en" ogImage="/images/illustrations/services-assessment.webp" structuredData={structuredData}>
+  <div class="w-full">
+    <MainMenuHero
+      eyebrow="Professional services"
+      title="Our Services"
+      description="Certification and conformity assessment services that support organizations in strengthening quality, competence, and process reliability."
+      image="/images/illustrations/services-assessment.webp"
+      imageAlt="Illustration of a service assessment and conformity evaluation process"
+    />
+    {services.length > 0 ? (
+      <Section spacing="default" class="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+        {services.map((service) => (
+          <ServiceCard
+            title={service.data.title}
+            description={service.data.intro}
+            href={servicePath(service.data)}
+          />
+        ))}
+      </Section>
+    ) : <Section spacing="default"><p>Service information will be available soon.</p></Section>}
+  </div>
+</WidePageLayout>

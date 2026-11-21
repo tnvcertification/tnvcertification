@@ -1,0 +1,34 @@
+---
+import { render } from "astro:content";
+import ServiceLayout from "../../../layouts/ServiceLayout.astro";
+import { getPublishedServices, servicePath } from "../../../data/services";
+import { servicePageJsonLd } from "../../../lib/structured-data";
+
+export async function getStaticPaths() {
+  const services = await getPublishedServices("en");
+  return services.map((service) => ({ params: { slug: service.data.slug }, props: { service } }));
+}
+const { service } = Astro.props;
+const { Content } = await render(service);
+const structuredData = servicePageJsonLd({
+  name: service.data.title,
+  description: service.data.metaDescription,
+  path: servicePath(service.data),
+  image: service.data.featuredImage.src,
+  serviceType: service.data.serviceType,
+  category: service.data.category,
+});
+---
+
+<ServiceLayout
+  title={service.data.title}
+  description={service.data.metaDescription}
+  lang={service.data.lang}
+  canonical={servicePath(service.data)}
+  ogImage={service.data.featuredImage.src}
+  imageAlt={service.data.featuredImage.alt}
+  blocks={service.data.blocks}
+  structuredData={structuredData}
+>
+  <Content />
+</ServiceLayout>

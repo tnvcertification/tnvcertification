@@ -5,17 +5,17 @@ import ArticleCard from "../../components/ArticleCard.astro";
 import ServiceCard from "../../components/ServiceCard.astro";
 import Section from "../../components/Section.astro";
 import SectionHeading from "../../components/SectionHeading.astro";
-import { getCollection } from "astro:content";
 import { getPublishedArticles, getServiceIndexArticles } from "../../data/articles";
+import { getPublishedServices, servicePath } from "../../data/services";
 import { siteSettings } from "../../site";
 import { serviceIndexJsonLd } from "../../lib/structured-data";
-const services = await getCollection("services", ({ data }) => data.draft !== true);
+const services = await getPublishedServices("id");
 const articles = getServiceIndexArticles(getPublishedArticles());
 const structuredData = serviceIndexJsonLd(
   services.map((service) => ({
     name: service.data.title,
     description: service.data.metaDescription,
-    path: `/services/${service.data.slug}/`,
+    path: servicePath(service.data),
   })),
 );
 ---
@@ -34,7 +34,7 @@ const structuredData = serviceIndexJsonLd(
           <ServiceCard
             title={service.data.title}
             description={service.data.intro}
-            href={`/services/${service.data.slug}/`}
+            href={servicePath(service.data)}
           />
         ))}
       </Section>

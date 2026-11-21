@@ -1,12 +1,13 @@
 ---
-import { getCollection, render } from "astro:content";
+import { render } from "astro:content";
 import ServiceLayout from "../../layouts/ServiceLayout.astro";
 import ArticleCard from "../../components/ArticleCard.astro";
 import { getPublishedArticles, getRelatedArticles } from "../../data/articles";
+import { getPublishedServices, servicePath } from "../../data/services";
 import { servicePageJsonLd } from "../../lib/structured-data";
 
 export async function getStaticPaths() {
-  const services = await getCollection("services", ({ data }) => data.draft !== true);
+  const services = await getPublishedServices("id");
   return services.map((service) => ({ params: { slug: service.data.slug }, props: { service } }));
 }
 const { service } = Astro.props;
@@ -16,7 +17,7 @@ const relatedArticles = serviceId ? getRelatedArticles(getPublishedArticles(), s
 const structuredData = servicePageJsonLd({
   name: service.data.title,
   description: service.data.metaDescription,
-  path: `/services/${service.data.slug}/`,
+  path: servicePath(service.data),
   image: service.data.featuredImage.src,
   serviceType: service.data.serviceType,
   category: service.data.category,
@@ -27,7 +28,7 @@ const structuredData = servicePageJsonLd({
   title={service.data.title}
   description={service.data.metaDescription}
   lang={service.data.lang}
-  canonical={`/services/${service.data.slug}/`}
+  canonical={servicePath(service.data)}
   ogImage={service.data.featuredImage.src}
   imageAlt={service.data.featuredImage.alt}
   blocks={service.data.blocks}
