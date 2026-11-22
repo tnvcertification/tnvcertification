@@ -22,10 +22,3 @@ blocks:
     emptyTitle: "Katalog pelatihan sedang disiapkan"
     emptyDescription: "Informasi program, materi, persyaratan peserta, dan jadwal akan ditampilkan setelah masing-masing program siap dipublikasikan. Jadwal pelaksanaan akan dikelola terpisah dari informasi program agar perubahan tanggal, lokasi, kuota, dan status pendaftaran tetap akurat."
 ---
-# Program Pelatihan Intiprima Sertifikasi
-
-Program Pelatihan Intiprima Sertifikasi adalah katalog informasi program pengembangan kompetensi untuk sistem manajemen, audit, dan kepatuhan.
-
-## Informasi program
-
-Katalog menampilkan program yang telah siap dipublikasikan. Setiap entri mengarah ke halaman program tersendiri, sementara informasi pelaksanaan dikelola terpisah agar perubahan jadwal tidak mengubah deskripsi program.

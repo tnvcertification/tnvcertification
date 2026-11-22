@@ -2,6 +2,7 @@ import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 import test from "node:test";
 import { parse as parseYaml } from "yaml";
+import { parseFrontmatterContent } from "../src/lib/content-validation.ts";
 
 const files = [
   "0020-halaman-home.md",
@@ -48,8 +49,18 @@ for (const { file, raw, data, body } of entries) {
     assert.doesNotMatch(raw, /konsult|consult/i);
   });
 
-  test(`${file} has one H1 and no skipped heading levels`, () => {
-    const levels = [...body.matchAll(/^(#{1,6})\s+/gm)].map((match) => match[1].length);
+  test(`${file} has an empty Markdown body`, () => {
+    assert.equal(body.trim(), "", `${file}: editorial entries must contain frontmatter only`);
+  });
+
+  test(`${file} has exactly one hero block`, () => {
+    const heroes = (data.blocks ?? []).filter((block) => block.type === "hero");
+    assert.equal(heroes.length, 1, `${file}: expected exactly one hero block`);
+  });
+
+  test(`${file} block headings form a valid hierarchy`, () => {
+    const { headings } = parseFrontmatterContent(data);
+    const levels = headings.map((heading) => heading.level);
     assert.equal(levels.filter((level) => level === 1).length, 1, `${file}: expected exactly one H1`);
     for (let index = 1; index < levels.length; index += 1) {
       assert.ok(levels[index] <= levels[index - 1] + 1, `${file}: heading level skipped (${levels[index - 1]} → ${levels[index]})`);

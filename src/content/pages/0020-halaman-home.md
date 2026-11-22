@@ -38,10 +38,3 @@ blocks:
     actionLabel: "Semua artikel →"
     actionHref: "/articles/"
 ---
-# Beranda Intiprima Sertifikasi
-
-Beranda Intiprima Sertifikasi adalah halaman awal situs yang merangkum informasi sertifikasi, layanan, dan wawasan terkini dari PT. Intiprima Sertifikasi.
-
-## Arah jelajah
-
-Halaman ini mengarahkan pengunjung ke katalog layanan dan arsip artikel. Informasi layanan menampilkan cakupan sertifikasi dan penilaian kepatuhan, sedangkan artikel memuat pembahasan tentang sistem manajemen dan konteks kepatuhan organisasi.

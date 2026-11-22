@@ -21,10 +21,3 @@ blocks:
     source: "articles"
     emptyTitle: "Artikel belum tersedia."
 ---
-# Artikel Intiprima Sertifikasi
-
-Artikel Intiprima Sertifikasi adalah arsip wawasan, panduan, dan pembahasan seputar sertifikasi, sistem manajemen, mutu, serta kepatuhan organisasi.
-
-## Arsip dan paginasi
-
-Artikel ditampilkan dari yang terbaru berdasarkan tanggal pembaruan. Arsip dibagi menjadi beberapa halaman agar setiap artikel dapat ditemukan melalui tautan halaman yang tersedia.

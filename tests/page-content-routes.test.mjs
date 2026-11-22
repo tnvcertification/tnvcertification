@@ -43,8 +43,10 @@ for (const copy of ["Belum ada jadwal yang dipublikasikan", "Jadwal Pelatihan"])
   });
 }
 
-test("about-us body keeps its body and delegates blocks to PageBlockRenderer", () => {
-  assert.match(routes["generic slug"], /isAboutPage/);
+test("generic route renders a frontmatter hero and blocks without a body", () => {
+  assert.doesNotMatch(routes["generic slug"], /<Content/);
+  assert.match(routes["generic slug"], /PageHero/);
+  assert.match(routes["generic slug"], /getPageHero/);
   assert.match(routes["generic slug"], /getPageBlocks\(entry\)/);
   assert.match(routes["generic slug"], /PageBlockRenderer/);
 });

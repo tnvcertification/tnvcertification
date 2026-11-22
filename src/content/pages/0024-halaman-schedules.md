@@ -24,10 +24,3 @@ blocks:
     emptyActionLabel: "Lihat katalog pelatihan →"
     emptyActionHref: "/trainings/"
 ---
-# Jadwal Pelatihan Intiprima Sertifikasi
-
-Jadwal Pelatihan Intiprima Sertifikasi adalah halaman yang memuat agenda kelas, tanggal pelaksanaan, metode, lokasi, dan status pendaftaran program pelatihan.
-
-## Pembaruan jadwal
-
-Data jadwal dikelola terpisah dari halaman program. Perubahan pada tanggal, lokasi, kuota, atau status pendaftaran dapat diperbarui tanpa mengubah informasi program yang terkait.

@@ -25,10 +25,3 @@ blocks:
     source: "articles"
     title: "Artikel Terbaru"
 ---
-# Layanan Intiprima Sertifikasi
-
-Layanan Intiprima Sertifikasi adalah kumpulan informasi mengenai layanan sertifikasi, pelatihan, dan penilaian kepatuhan yang disediakan untuk organisasi.
-
-## Cakupan katalog
-
-Setiap entri layanan memuat ringkasan ruang lingkup dan informasi yang telah dipublikasikan. Pengunjung dapat memilih layanan untuk melihat detailnya, lalu meninjau artikel terkait sebagai tambahan konteks.

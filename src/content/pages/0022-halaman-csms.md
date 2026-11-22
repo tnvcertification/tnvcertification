@@ -57,10 +57,3 @@ blocks:
       label: "Lihat layanan"
       url: "/services/"
 ---
-# Contractor Safety Management System (CSMS)
-
-Contractor Safety Management System (CSMS) adalah pendekatan yang digunakan pemberi kerja atau pemilik proyek untuk memastikan kontraktor memahami persyaratan keselamatan dan kesehatan kerja.
-
-## Ruang lingkup halaman
-
-Halaman ini menyajikan konteks, status pengembangan, serta area persiapan yang dapat diperiksa kontraktor. Informasi yang belum diverifikasi tidak disajikan sebagai layanan penilaian atau penerbitan sertifikat yang tersedia.
