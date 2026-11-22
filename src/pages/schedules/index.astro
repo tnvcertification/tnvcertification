@@ -1,7 +1,19 @@
 ---
 import ScheduleArchiveLayout from "../../layouts/ScheduleArchiveLayout.astro";
-import { getCollection } from "astro:content";
+import ListingSection from "../../components/page/ListingSection.astro";
 import ButtonLink from "../../components/ButtonLink.astro";
+import { getCollection } from "astro:content";
+import {
+  getPageBlocks,
+  getPageEntry,
+  getPageHero,
+  type ListingBlock,
+} from "../../data/pages";
+
+const entry = await getPageEntry("schedules");
+const hero = getPageHero(entry);
+const listings = getPageBlocks(entry).filter((block): block is ListingBlock => block.type === "listing");
+const fallbackImage = { src: entry.data.featuredImage.src, alt: entry.data.featuredImage.alt };
 
 const [schedules, trainings] = await Promise.all([
   getCollection("trainingSchedules"),
@@ -42,15 +54,16 @@ const statusLabel = (status?: string) => ({
 ---
 
 <ScheduleArchiveLayout
-  title="Jadwal Pelatihan"
-  description="Temukan agenda kelas dan pelaksanaan program pelatihan, termasuk tanggal, metode, lokasi, biaya, kuota, serta status pendaftaran. Jadwal dikelola terpisah dari informasi program agar perubahan pelaksanaan dapat diperbarui tanpa mengubah halaman program."
+  title={hero?.title ?? entry.data.title}
+  description={hero?.description ?? entry.data.intro}
   canonical="/schedules/"
-  lang="id"
-  image="/images/illustrations/schedules-calendar.webp"
-  imageAlt="Ilustrasi kalender agenda kelas dan jadwal pelaksanaan pelatihan"
+  lang={entry.data.lang}
+  image={hero?.image ?? fallbackImage.src}
+  imageAlt={hero?.imageAlt ?? fallbackImage.alt}
+  eyebrow={hero?.eyebrow}
 >
-
-    {publishedSchedules.length > 0 ? (
+  {listings.map((block) => (
+    <ListingSection block={block} hasItems={publishedSchedules.length > 0}>
       <div class="divide-y divide-border border-y border-border">
         {publishedSchedules.map((schedule) => {
           const training = trainingBySlug.get(schedule.data.trainingSlug)!;
@@ -91,13 +104,6 @@ const statusLabel = (status?: string) => ({
           );
         })}
       </div>
-    ) : (
-      <div class="max-w-3xl border-y border-border py-8">
-        <h2 class="text-xl font-semibold tracking-tight text-ink">Belum ada jadwal yang dipublikasikan</h2>
-        <p class="mt-3 leading-relaxed text-ink-muted">
-          Agenda pelaksanaan akan ditampilkan setelah tanggal, program terkait, dan informasi pendaftaran dikonfirmasi. Kunjungi katalog untuk mengenal program pelatihan yang sedang disiapkan.
-        </p>
-        <a href="/trainings/" class="mt-5 inline-flex min-h-11 items-center font-semibold text-brand-deepblue underline underline-offset-4 hover:text-brand-blue focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-blue">Lihat katalog pelatihan →</a>
-      </div>
-    )}
+    </ListingSection>
+  ))}
 </ScheduleArchiveLayout>

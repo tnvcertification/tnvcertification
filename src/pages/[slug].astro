@@ -4,7 +4,8 @@ import ArticleLayout from "../layouts/ArticleLayout.astro";
 import WidePageLayout from "../layouts/WidePageLayout.astro";
 import FeaturedImage from "../components/FeaturedImage.astro";
 import Section from "../components/Section.astro";
-import { routeOwnedPageSlugs } from "../data/pages";
+import PageBlockRenderer from "../components/page/PageBlockRenderer.astro";
+import { getPageBlocks, routeOwnedPageSlugs } from "../data/pages";
 
 export async function getStaticPaths() {
   const pages = await getCollection("pages", ({ data }) => data.draft !== true);
@@ -16,6 +17,8 @@ const { entry } = Astro.props;
 const { Content } = await render(entry);
 const canonical = `/${entry.data.slug}/`;
 const isAboutPage = entry.data.slug === "about-us";
+const blocks = getPageBlocks(entry);
+const fallbackImage = { src: entry.data.featuredImage.src, alt: entry.data.featuredImage.alt };
 ---
 
 {isAboutPage ? (
@@ -34,6 +37,7 @@ const isAboutPage = entry.data.slug === "about-us";
         class="mb-8"
       />
       <div class="prose"><Content /></div>
+      <PageBlockRenderer blocks={blocks} fallbackImage={fallbackImage} />
     </Section>
   </WidePageLayout>
 ) : (
