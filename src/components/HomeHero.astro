@@ -3,15 +3,16 @@ import MainMenuHero from "./MainMenuHero.astro";
 import ButtonLink from "./ButtonLink.astro";
 
 interface Props {
+  eyebrow?: string;
   title: string;
   description: string;
 }
 
-const { title, description } = Astro.props;
+const { eyebrow, title, description } = Astro.props;
 ---
 
 <MainMenuHero
-  eyebrow="Informasi • Layanan • Wawasan"
+  eyebrow={eyebrow}
   title={title}
   description={description}
   image="/images/illustrations/home-assurance.webp"

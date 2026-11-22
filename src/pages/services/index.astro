@@ -1,14 +1,19 @@
 ---
 import WidePageLayout from "../../layouts/WidePageLayout.astro";
-import MainMenuHero from "../../components/MainMenuHero.astro";
+import PageHero from "../../components/page/PageHero.astro";
+import ListingSection from "../../components/page/ListingSection.astro";
 import ArticleCard from "../../components/ArticleCard.astro";
 import ServiceCard from "../../components/ServiceCard.astro";
-import Section from "../../components/Section.astro";
-import SectionHeading from "../../components/SectionHeading.astro";
 import { getPublishedArticles, getServiceIndexArticles } from "../../data/articles";
 import { getPublishedServices, servicePath } from "../../data/services";
+import { getPageBlocks, getPageEntry, getPageHero, type ListingBlock } from "../../data/pages";
 import { siteSettings } from "../../site";
 import { serviceIndexJsonLd } from "../../lib/structured-data";
+
+const entry = await getPageEntry("services");
+const hero = getPageHero(entry);
+const listings = getPageBlocks(entry).filter((block): block is ListingBlock => block.type === "listing");
+const fallbackImage = { src: entry.data.featuredImage.src, alt: entry.data.featuredImage.alt };
 const services = await getPublishedServices("id");
 const articles = getServiceIndexArticles(getPublishedArticles());
 const structuredData = serviceIndexJsonLd(
@@ -19,33 +24,35 @@ const structuredData = serviceIndexJsonLd(
   })),
 );
 ---
-<WidePageLayout title={`Layanan | ${siteSettings.title}`} description="Layanan sertifikasi, pelatihan, dan penilaian kepatuhan." canonical="/services/" lang="id" ogImage="/images/illustrations/services-assessment.webp" structuredData={structuredData}>
+
+<WidePageLayout
+  title={`${entry.data.title} | ${siteSettings.title}`}
+  description={entry.data.metaDescription}
+  canonical="/services/"
+  lang={entry.data.lang}
+  ogImage={fallbackImage.src}
+  structuredData={structuredData}
+>
   <div class="w-full">
-    <MainMenuHero
-      eyebrow="Layanan profesional"
-      title="Layanan Kami"
-      description="Layanan sertifikasi, pelatihan, dan penilaian kepatuhan untuk mendukung organisasi dalam meningkatkan mutu, kompetensi, dan keandalan proses."
-      image="/images/illustrations/services-assessment.webp"
-      imageAlt="Ilustrasi proses asesmen layanan sertifikasi dan evaluasi kepatuhan"
-    />
-    {services.length > 0 ? (
-      <Section spacing="default" class="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
-        {services.map((service) => (
-          <ServiceCard
-            title={service.data.title}
-            description={service.data.intro}
-            href={servicePath(service.data)}
-          />
-        ))}
-      </Section>
-    ) : <Section spacing="default"><p>Informasi layanan akan segera tersedia.</p></Section>}
-    {articles.length > 0 && (
-      <Section spacing="spacious" aria-labelledby="artikel-terbaru-layanan">
-        <SectionHeading id="artikel-terbaru-layanan" title="Artikel Terbaru" />
-        <div class="mt-6 grid gap-8 md:grid-cols-3">
+    {hero && <PageHero block={hero} fallbackImage={fallbackImage} />}
+    {listings.map((block) => block.source === "services" ? (
+      <ListingSection block={block} hasItems={services.length > 0}>
+        <div class="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+          {services.map((service) => (
+            <ServiceCard
+              title={service.data.title}
+              description={service.data.intro}
+              href={servicePath(service.data)}
+            />
+          ))}
+        </div>
+      </ListingSection>
+    ) : block.source === "articles" ? (
+      <ListingSection block={block} hasItems={articles.length > 0}>
+        <div class="grid gap-8 md:grid-cols-3">
           {articles.map((article) => <ArticleCard article={article} />)}
         </div>
-      </Section>
-    )}
+      </ListingSection>
+    ) : null)}
   </div>
 </WidePageLayout>

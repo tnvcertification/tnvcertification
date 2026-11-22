@@ -2,7 +2,9 @@
 import Layout from "../../../layouts/Layout.astro";
 import ArticleCard from "../../../components/ArticleCard.astro";
 import { getPublishedArticles } from "../../../data/articles";
+import { getPageEntry } from "../../../data/pages";
 import { getAdjacentPageHrefs, getPageLinks } from "../../../lib/pagination";
+import { siteSettings } from "../../../site";
 
 export function getStaticPaths() {
   const pageSize = 9;
@@ -13,15 +15,22 @@ export function getStaticPaths() {
     return { params: { page: String(page) }, props: { page, articles: ordered.slice((page - 1) * pageSize, page * pageSize), pageCount } };
   });
 }
+
+const entry = await getPageEntry("articles");
 const { page, articles, pageCount: totalPages } = Astro.props;
 const pageLinks = getPageLinks(page, totalPages, "/articles/");
 const adjacent = getAdjacentPageHrefs(page, totalPages, "/articles/");
 ---
 
-<Layout path={`/articles/page/${page}/`} title={`Artikel — Halaman ${page} | PT. Intiprima Sertifikasi`} description="Artikel sertifikasi, pelatihan, dan kepatuhan." ogImage="/images/illustrations/articles-archive-page-2.webp">
+<Layout
+  path={`/articles/page/${page}/`}
+  title={`${entry.data.title} — Halaman ${page} | ${siteSettings.title}`}
+  description={entry.data.metaDescription}
+  ogImage="/images/illustrations/articles-archive-page-2.webp"
+>
   <section class="w-full" aria-labelledby="article-archive">
     <header class="mb-8 grid items-center gap-8 md:grid-cols-[1fr_280px]">
-      <h1 id="article-archive" class="text-3xl font-semibold text-brand-deepblue">Artikel</h1>
+      <h1 id="article-archive" class="text-3xl font-semibold text-brand-deepblue">{entry.data.title}</h1>
       <img data-page-image src="/images/illustrations/articles-archive-page-2.webp" alt="" aria-hidden="true" width="640" height="480" loading="lazy" class="mx-auto w-full max-w-[280px]" />
     </header>
     <div class="mt-8 grid gap-8 md:grid-cols-2 lg:grid-cols-3">

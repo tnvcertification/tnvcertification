@@ -1,49 +1,43 @@
 ---
 import WidePageLayout from "../../layouts/WidePageLayout.astro";
-import MainMenuHero from "../../components/MainMenuHero.astro";
+import PageHero from "../../components/page/PageHero.astro";
+import ListingSection from "../../components/page/ListingSection.astro";
 import TrainingCard from "../../components/TrainingCard.astro";
-import Section from "../../components/Section.astro";
 import { getCollection } from "astro:content";
+import { getPageBlocks, getPageEntry, getPageHero, type ListingBlock } from "../../data/pages";
 import { siteSettings } from "../../site";
 
+const entry = await getPageEntry("trainings");
+const hero = getPageHero(entry);
+const listings = getPageBlocks(entry).filter((block): block is ListingBlock => block.type === "listing");
+const fallbackImage = { src: entry.data.featuredImage.src, alt: entry.data.featuredImage.alt };
 const trainings = await getCollection(
   "training",
   ({ data }) => data.draft !== true && data.lang === "id",
 );
 ---
+
 <WidePageLayout
-  title={`Pelatihan | ${siteSettings.title}`}
-  description="Katalog program pelatihan dan pengembangan kompetensi untuk sistem manajemen, audit, dan kepatuhan."
+  title={`${entry.data.title} | ${siteSettings.title}`}
+  description={entry.data.metaDescription}
   canonical="/trainings/"
-  lang="id"
-  ogImage="/images/illustrations/training-competency.webp"
+  lang={entry.data.lang}
+  ogImage={fallbackImage.src}
 >
   <div class="w-full">
-    <MainMenuHero
-      eyebrow="Training &amp; Competency"
-      title="Program Pelatihan"
-      description="Program pembelajaran untuk membantu organisasi dan profesional memahami persyaratan sistem manajemen, meningkatkan kompetensi, serta mempersiapkan penerapan dan audit."
-      image="/images/illustrations/training-competency.webp"
-      imageAlt="Ilustrasi pembelajaran profesional, pengembangan kompetensi, dan pelatihan"
-    />
-
-    {trainings.length > 0 ? (
-      <Section spacing="default" class="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
-        {trainings.map((training) => (
-          <TrainingCard
-            title={training.data.title}
-            description={training.data.intro}
-            href={`/trainings/${training.data.slug}/`}
-          />
-        ))}
-      </Section>
-    ) : (
-      <Section spacing="default" class="max-w-3xl border-y border-border py-8">
-        <h2 class="text-xl font-semibold tracking-tight text-ink">Katalog pelatihan sedang disiapkan</h2>
-        <p class="mt-3 leading-relaxed text-ink-muted">
-          Informasi program, materi, persyaratan peserta, dan jadwal akan ditampilkan setelah masing-masing program siap dipublikasikan. Jadwal pelaksanaan akan dikelola terpisah dari informasi program agar perubahan tanggal, lokasi, kuota, dan status pendaftaran tetap akurat.
-        </p>
-      </Section>
-    )}
+    {hero && <PageHero block={hero} fallbackImage={fallbackImage} />}
+    {listings.map((block) => (
+      <ListingSection block={block} hasItems={trainings.length > 0}>
+        <div class="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+          {trainings.map((training) => (
+            <TrainingCard
+              title={training.data.title}
+              description={training.data.intro}
+              href={`/trainings/${training.data.slug}/`}
+            />
+          ))}
+        </div>
+      </ListingSection>
+    ))}
   </div>
 </WidePageLayout>

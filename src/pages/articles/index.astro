@@ -1,12 +1,18 @@
 ---
 import WidePageLayout from "../../layouts/WidePageLayout.astro";
-import MainMenuHero from "../../components/MainMenuHero.astro";
+import PageHero from "../../components/page/PageHero.astro";
+import ListingSection from "../../components/page/ListingSection.astro";
 import ArticleCard from "../../components/ArticleCard.astro";
 import Section from "../../components/Section.astro";
 import { getPublishedArticles } from "../../data/articles";
+import { getPageBlocks, getPageEntry, getPageHero, type ListingBlock } from "../../data/pages";
 import { getAdjacentPageHrefs, getPageLinks } from "../../lib/pagination";
 import { siteSettings } from "../../site";
 
+const entry = await getPageEntry("articles");
+const hero = getPageHero(entry);
+const listings = getPageBlocks(entry).filter((block): block is ListingBlock => block.type === "listing");
+const fallbackImage = { src: entry.data.featuredImage.src, alt: entry.data.featuredImage.alt };
 const articles = getPublishedArticles();
 const pageSize = 9;
 const pageCount = Math.max(1, Math.ceil(articles.length / pageSize));
@@ -16,32 +22,24 @@ const adjacent = getAdjacentPageHrefs(1, pageCount, "/articles/");
 ---
 
 <WidePageLayout
-  title={`Artikel | ${siteSettings.title}`}
-  description="Artikel, wawasan, dan panduan sertifikasi serta kepatuhan."
+  title={`${entry.data.title} | ${siteSettings.title}`}
+  description={entry.data.metaDescription}
   canonical="/articles/"
-  lang="id"
-  ogImage="/images/illustrations/articles-editorial.webp"
+  lang={entry.data.lang}
+  ogImage={fallbackImage.src}
 >
   <div class="w-full">
-    <MainMenuHero
-      eyebrow="Wawasan dan publikasi"
-      title="Artikel"
-      description="Wawasan, panduan, dan pembahasan seputar sertifikasi, sistem manajemen, peningkatan mutu, serta kepatuhan organisasi."
-      image="/images/illustrations/articles-editorial.webp"
-      imageAlt="Ilustrasi publikasi editorial, dokumen, dan bahan bacaan profesional"
-    />
-    {pageArticles.length > 0 ? (
-      <Section spacing="default" class="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
-        {pageArticles.map((article) => <ArticleCard article={article} />)}
-      </Section>
-    ) : (
-      <Section spacing="default">
-        <p>Artikel belum tersedia.</p>
-      </Section>
-    )}
+    {hero && <PageHero block={hero} fallbackImage={fallbackImage} />}
+    {listings.map((block) => (
+      <ListingSection block={block} hasItems={pageArticles.length > 0}>
+        <div class="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+          {pageArticles.map((article) => <ArticleCard article={article} />)}
+        </div>
+      </ListingSection>
+    ))}
     {pageCount > 1 && (
-      <Section spacing="spacious">
-        <nav class="flex flex-wrap items-center gap-4" aria-label="Pagination">
+      <Section spacing="spacious" aria-label="Pagination">
+        <nav class="flex flex-wrap items-center gap-4">
           {pageLinks.map((link) => link.current
             ? <span aria-current="page" class="font-semibold text-brand-deepblue">{link.label}</span>
             : <a href={link.href} class="underline">{link.label}</a>

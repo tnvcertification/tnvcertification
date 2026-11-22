@@ -1,44 +1,37 @@
 ---
 import Layout from "../layouts/Layout.astro";
-import HomeHero from "../components/HomeHero.astro";
 import ArticleCard from "../components/ArticleCard.astro";
-import Section from "../components/Section.astro";
-import SectionHeading from "../components/SectionHeading.astro";
-import { siteSettings } from "../site";
+import PageHero from "../components/page/PageHero.astro";
+import LinkGrid from "../components/page/LinkGrid.astro";
+import ListingSection from "../components/page/ListingSection.astro";
 import { getHomepageArticles, getPublishedArticles } from "../data/articles";
+import {
+  getPageBlocks,
+  getPageEntry,
+  getPageHero,
+  type LinkGridBlock,
+  type ListingBlock,
+} from "../data/pages";
 
+const entry = await getPageEntry("home");
+const hero = getPageHero(entry);
+const blocks = getPageBlocks(entry);
+const fallbackImage = { src: entry.data.featuredImage.src, alt: entry.data.featuredImage.alt };
 const articles = getHomepageArticles(getPublishedArticles());
+const linkGrids = blocks.filter((block): block is LinkGridBlock => block.type === "link-grid");
+const listings = blocks.filter((block): block is ListingBlock => block.type === "listing");
 ---
 
-<Layout title={siteSettings.title} description={siteSettings.description} ogImage="/images/illustrations/home-assurance.webp">
+<Layout title={entry.data.title} description={entry.data.metaDescription} ogImage={fallbackImage.src}>
   <div class="w-full">
-    <HomeHero title="Sertifikasi dan kepatuhan, dengan informasi yang jelas." description={siteSettings.description} />
-
-    <Section spacing="spacious" aria-label="Jelajahi situs" class="grid gap-5 sm:grid-cols-2">
-      <a href="/services/" class="group flex h-full flex-col border-t-2 border-brand-deepblue py-5 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand-blue">
-        <span class="text-xs font-semibold uppercase tracking-[0.12em] text-ink-subtle">01 / Layanan</span>
-        <h2 class="mt-3 text-xl font-semibold tracking-tight text-ink group-hover:text-brand-deepblue">Informasi layanan</h2>
-        <p class="mt-2 max-w-xl text-sm leading-relaxed text-ink-muted">Lihat informasi layanan dan pembaruan katalog yang tersedia.</p>
-        <span class="mt-auto inline-flex min-h-11 items-center pt-4 text-sm font-semibold text-brand-deepblue group-hover:underline">Jelajahi →</span>
-      </a>
-      <a href="/articles/" class="group flex h-full flex-col border-t-2 border-brand-deepblue py-5 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand-blue">
-        <span class="text-xs font-semibold uppercase tracking-[0.12em] text-ink-subtle">02 / Wawasan</span>
-        <h2 class="mt-3 text-xl font-semibold tracking-tight text-ink group-hover:text-brand-deepblue">Artikel dan panduan</h2>
-        <p class="mt-2 max-w-xl text-sm leading-relaxed text-ink-muted">Baca materi tentang sertifikasi, sistem manajemen, dan kepatuhan.</p>
-        <span class="mt-auto inline-flex min-h-11 items-center pt-4 text-sm font-semibold text-brand-deepblue group-hover:underline">Baca artikel →</span>
-      </a>
-    </Section>
-
-    {articles.length > 0 && (
-      <Section spacing="spacious" aria-labelledby="artikel-terbaru">
-        <div class="flex flex-wrap items-end justify-between gap-4">
-          <SectionHeading id="artikel-terbaru" eyebrow="Wawasan terbaru" title="Artikel Terbaru" />
-          <a href="/articles/" class="text-sm font-semibold text-brand-deepblue underline underline-offset-4 hover:text-brand-blue">Semua artikel →</a>
-        </div>
-        <div class="mt-6 grid gap-8 md:grid-cols-3">
+    {hero && <PageHero block={hero} fallbackImage={fallbackImage} />}
+    {linkGrids.map((block) => <LinkGrid block={block} />)}
+    {listings.map((block) => (
+      <ListingSection block={block} hasItems={articles.length > 0}>
+        <div class="grid gap-8 md:grid-cols-3">
           {articles.map((article) => <ArticleCard article={article} />)}
         </div>
-      </Section>
-    )}
+      </ListingSection>
+    ))}
   </div>
 </Layout>
