@@ -2,9 +2,10 @@
 import Layout from "./Layout.astro";
 import Breadcrumbs from "../components/Breadcrumbs.astro";
 import Container from "../components/Container.astro";
-import FeaturedImage from "../components/FeaturedImage.astro";
-import BlockRenderer, { type Block } from "../components/BlockRenderer.astro";
-import type { PageBlock } from "../data/pages";
+import PageHero from "../components/page/PageHero.astro";
+import PageBlockRenderer from "../components/page/PageBlockRenderer.astro";
+import type { HeroBlock, PageBlock } from "../data/pages";
+
 interface Props {
   title: string;
   description: string;
@@ -12,42 +13,32 @@ interface Props {
   canonical?: string;
   ogImage?: string;
   imageAlt: string;
-  blocks?: PageBlock[];
   structuredData?: unknown[];
+  breadcrumbs?: Array<{ label: string; href?: string }>;
+  hero: HeroBlock;
+  blocks: PageBlock[];
 }
-const { title, description, lang, canonical, ogImage, imageAlt, blocks = [], structuredData = [] } = Astro.props;
-// Transitional: the service schema now permits page blocks, but BlockRenderer
-// still accepts only the legacy block types. Task 4 replaces this with PageBlockRenderer.
-const legacyBlocks = blocks.filter(
-  (block): block is PageBlock & Block =>
-    block.type === "content-section" ||
-    block.type === "faq" ||
-    block.type === "howto" ||
-    block.type === "cta",
-);
+
+const {
+  title,
+  description,
+  lang,
+  canonical,
+  ogImage,
+  imageAlt,
+  structuredData = [],
+  breadcrumbs = [],
+  hero,
+  blocks,
+} = Astro.props;
+const fallbackImage = { src: ogImage ?? "", alt: imageAlt };
 ---
+
 <Layout title={title} description={description} lang={lang} canonical={canonical} ogImage={ogImage} structuredData={structuredData}>
   <Container as="article" variant="wide" gutter={false}>
-    <Breadcrumbs items={[{ label: "Beranda", href: "/" }, { label: "Layanan", href: "/services/" }, { label: title }]} />
-    {ogImage && <FeaturedImage src={ogImage} alt={imageAlt} priority class="mb-8 mt-8 max-w-5xl" />}
-    <div class="prose mt-8 max-w-3xl"><slot /></div>
-    <BlockRenderer blocks={legacyBlocks} lang={lang} />
+    <Breadcrumbs items={breadcrumbs} lang={lang === "en" ? "en" : "id"} />
+    {hero && <PageHero block={hero} fallbackImage={fallbackImage} />}
+    <PageBlockRenderer blocks={blocks} fallbackImage={fallbackImage} />
+    <slot />
   </Container>
 </Layout>
-
-<style>
-  .prose :global(h1) {
-    margin: 0;
-    font-size: 1.875rem;
-    line-height: 1.2;
-    font-weight: 600;
-    letter-spacing: -0.025em;
-    color: var(--color-ink);
-  }
-  .prose :global(h1 + p) {
-    margin-top: 0.75rem;
-    font-size: 1.125rem;
-    line-height: 1.75;
-    color: var(--color-ink-muted);
-  }
-</style>

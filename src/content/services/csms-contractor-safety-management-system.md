@@ -15,43 +15,62 @@ serviceType: "Assessment"
 category: "Keselamatan Kontraktor / K3"
 categoryIds:
   - contractor-safety
+blocks:
+  - type: "hero"
+    id: "hero-layanan"
+    eyebrow: "Keselamatan Kontraktor / K3"
+    title: "Penilaian Contractor Safety Management System (CSMS)"
+    description: "Penilaian Contractor Safety Management System (CSMS) adalah rencana layanan peninjauan kesiapan kontraktor dalam memenuhi persyaratan keselamatan dan kesehatan kerja yang ditetapkan pemberi kerja atau pemilik proyek; skema, kriteria, ruang lingkup, dan kewenangannya masih diverifikasi."
+  - type: "content-section"
+    id: "status-dan-konteks"
+    surface: "white"
+    title: "Status dan konteks"
+    description: "CSMS pada konteks ini merujuk pada Contractor Safety Management System (sistem manajemen keselamatan kontraktor), bukan sistem manajemen cybersecurity otomotif. Halaman ini berstatus draft dan belum menyatakan layanan atau penerbitan sertifikat CSMS formal sudah tersedia. Skema, metode penilaian, kriteria, ruang lingkup, dan kelayakan penyelenggaraan layanan masih perlu dikonfirmasi sebelum halaman ini diterbitkan."
+  - type: "content-section"
+    id: "area-peninjauan-direncanakan"
+    surface: "mint"
+    title: "Area peninjauan yang direncanakan"
+    description: "Area berikut merupakan cakupan awal untuk riset dan pengembangan skema, bukan kriteria penilaian final:"
+    items:
+      - title: "Kebijakan dan dokumentasi"
+        description: "Kebijakan, dokumentasi, dan tata kelola keselamatan kerja."
+      - title: "Identifikasi bahaya"
+        description: "Identifikasi bahaya dan penilaian risiko."
+      - title: "Kompetensi pekerja"
+        description: "Kompetensi pekerja, pelatihan, dan bukti kualifikasi."
+      - title: "Prosedur kerja aman"
+        description: "Prosedur kerja aman serta kesiapan operasional."
+      - title: "Pengendalian risiko"
+        description: "Pengendalian risiko pekerjaan dan mekanisme tanggap insiden."
+      - title: "Persyaratan pemberi kerja"
+        description: "Persyaratan keselamatan dari pemberi kerja atau pemilik proyek."
+  - type: "content-section"
+    id: "hubungan-dengan-iso-45001"
+    surface: "cream"
+    title: "Hubungan dengan ISO 45001"
+    description: "ISO 45001 dapat menjadi referensi sistem manajemen keselamatan dan kesehatan kerja yang relevan. Namun, penilaian CSMS kontraktor tidak otomatis sama dengan sertifikasi ISO 45001. Persyaratan dan metode penilaian CSMS harus ditetapkan serta diverifikasi tersendiri."
+  - type: "content-section"
+    id: "informasi-yang-diverifikasi"
+    surface: "navy"
+    title: "Informasi yang harus diverifikasi sebelum publikasi"
+    description: "Informasi ini tidak boleh dianggap sebagai pengumuman bahwa layanan atau penerbitan sertifikat CSMS formal sudah tersedia."
+    items:
+      - title: "Skema CSMS"
+        description: "Skema dan pemilik persyaratan CSMS yang berlaku."
+      - title: "Metode penilaian"
+        description: "Metode, kriteria, pembobotan, dan mekanisme penilaian."
+      - title: "Tahapan evaluasi"
+        description: "Tahapan evaluasi dan dokumen yang dibutuhkan."
+      - title: "Ruang lingkup layanan"
+        description: "Ruang lingkup layanan serta batas tanggung jawab."
+      - title: "Bukti kewenangan"
+        description: "Bukti kewenangan, pengakuan, atau persetujuan yang diperlukan untuk menawarkan layanan dan membuat klaim formal."
+  - type: "content-section"
+    id: "informasi-layanan"
+    surface: "white"
+    title: "Informasi layanan"
+    description: "Informasi mengenai skema, ruang lingkup, persyaratan, dan ketersediaan layanan akan diterbitkan setelah proses verifikasi selesai."
+
+relatedArticles:
+  title: "Artikel Terkait"
 ---
-
-# Penilaian Contractor Safety Management System (CSMS)
-
-Penilaian Contractor Safety Management System (CSMS) adalah rencana layanan peninjauan kesiapan kontraktor dalam memenuhi persyaratan keselamatan dan kesehatan kerja yang ditetapkan pemberi kerja atau pemilik proyek; skema, kriteria, ruang lingkup, dan kewenangannya masih diverifikasi.
-
-## Status dan konteks
-
-CSMS pada konteks ini merujuk pada *Contractor Safety Management System* (sistem manajemen keselamatan kontraktor), bukan sistem manajemen cybersecurity otomotif. Halaman ini berstatus draft dan belum menyatakan layanan atau penerbitan sertifikat CSMS formal sudah tersedia.
-
-Skema, metode penilaian, kriteria, ruang lingkup, dan kelayakan penyelenggaraan layanan masih perlu dikonfirmasi sebelum halaman ini diterbitkan.
-
-## Area peninjauan yang direncanakan
-
-Area berikut merupakan cakupan awal untuk riset dan pengembangan skema, bukan kriteria penilaian final:
-
-- Kebijakan, dokumentasi, dan tata kelola keselamatan kerja.
-- Identifikasi bahaya dan penilaian risiko.
-- Kompetensi pekerja, pelatihan, dan bukti kualifikasi.
-- Prosedur kerja aman serta kesiapan operasional.
-- Pengendalian risiko pekerjaan dan mekanisme tanggap insiden.
-- Persyaratan keselamatan dari pemberi kerja atau pemilik proyek.
-
-## Hubungan dengan ISO 45001
-
-ISO 45001 dapat menjadi referensi sistem manajemen keselamatan dan kesehatan kerja yang relevan. Namun, penilaian CSMS kontraktor tidak otomatis sama dengan sertifikasi ISO 45001. Persyaratan dan metode penilaian CSMS harus ditetapkan serta diverifikasi tersendiri.
-
-## Informasi yang harus diverifikasi sebelum publikasi
-
-- Skema dan pemilik persyaratan CSMS yang berlaku.
-- Metode, kriteria, pembobotan, dan mekanisme penilaian.
-- Tahapan evaluasi dan dokumen yang dibutuhkan.
-- Ruang lingkup layanan serta batas tanggung jawab.
-- Bukti kewenangan, pengakuan, atau persetujuan yang diperlukan untuk menawarkan layanan dan membuat klaim formal.
-
-Informasi ini tidak boleh dianggap sebagai pengumuman bahwa layanan atau penerbitan sertifikat CSMS formal sudah tersedia.
-
-## Informasi layanan
-
-Informasi mengenai skema, ruang lingkup, persyaratan, dan ketersediaan layanan akan diterbitkan setelah proses verifikasi selesai.

@@ -17,6 +17,11 @@ category: "Environmental Management System"
 categoryIds:
   - "environmental-management"
 blocks:
+  - type: "hero"
+    id: "hero-layanan"
+    eyebrow: "Environmental Management System"
+    title: "ISO 14001:2026 Environmental Management System Certification"
+    description: "ISO 14001:2026 Environmental Management System Certification is an independent conformity assessment of an organization's environmental management system against the requirements of the latest ISO 14001 edition."
   - type: "content-section"
     id: "iso14001-standar-terkini"
     surface: "blue"
@@ -90,6 +95,28 @@ blocks:
         description: "Use ISO publications, relevant accreditation-body transition requirements, and formal notices from the certificate-issuing certification body as primary references."
       - title: "Plan the transition audit"
         description: "The timing and method of the transition audit are determined in accordance with applicable requirements and the organization's certification cycle."
+  - type: "content-section"
+    id: "service-development-status"
+    surface: "white"
+    title: "Service development status"
+    description: "This page is being prepared for the service catalogue. PT. Intiprima Sertifikasi has not confirmed the availability of ISO 14001:2026 certification services. The required scope, scheme status, and authority must be verified before this page can be published. Publication of this page must not be interpreted as a statement that PT. Intiprima Sertifikasi holds accreditation, recognition, or authority to issue ISO 14001:2026 certificates."
+  - type: "content-section"
+    id: "certification-process-overview"
+    surface: "navy"
+    title: "Certification process overview"
+    description: "If the service is approved and becomes available, environmental management system certification generally includes an application, scope determination, audit planning, a Stage 1 audit where applicable, a Stage 2 audit, resolution of findings, certification decision review, and surveillance according to the certification cycle. Actual requirements follow the applicable scheme, standard, and procedures of the authorized certification body."
+  - type: "link-grid"
+    id: "official-references"
+    surface: "cream"
+    title: "Official references"
+    items:
+      - title: "ISO 14001:2026 — Environmental management systems — Requirements with guidance for use"
+        href: "https://www.iso.org/standard/14001"
+      - title: "ISO announcement: ISO 14001:2026 published on 15 April 2026"
+        href: "https://www.iso.org/news/2026/04/iso-14001-2026-published"
+      - title: "Global ACI: Transition Requirements for ISO 14001:2026"
+        href: "https://global-aci.org/en/news/global-aci-publishes-transition-requirements-for-iso-140012026/"
+
   - type: "faq"
     id: "faq"
     surface: "white"
@@ -102,23 +129,6 @@ blocks:
         answer: "No, not automatically. Certificates and transition activities are governed by the applicable transition requirements. Organizations should confirm the schedule and requirements with the certificate-issuing certification body."
       - question: "Is TNCV currently accepting applications for ISO 14001:2026 certification?"
         answer: "This page is still a draft for content development. The availability, scope, and authority of PT. Intiprima Sertifikasi to provide this certification service have not yet been approved for publication. Service information will be published only after internal verification is complete."
+relatedArticles:
+  title: "Related articles"
 ---
-# ISO 14001:2026 Environmental Management System Certification
-
-ISO 14001:2026 Environmental Management System Certification is an independent conformity assessment of an organization's environmental management system against the requirements of the latest ISO 14001 edition.
-
-## Service development status
-
-This page is being prepared for the service catalogue. **PT. Intiprima Sertifikasi has not confirmed the availability of ISO 14001:2026 certification services.** The required scope, scheme status, and authority must be verified before this page can be published.
-
-Publication of this page must not be interpreted as a statement that PT. Intiprima Sertifikasi holds accreditation, recognition, or authority to issue ISO 14001:2026 certificates.
-
-## Certification process overview
-
-If the service is approved and becomes available, environmental management system certification generally includes an application, scope determination, audit planning, a Stage 1 audit where applicable, a Stage 2 audit, resolution of findings, certification decision review, and surveillance according to the certification cycle. Actual requirements follow the applicable scheme, standard, and procedures of the authorized certification body.
-
-## Official references
-
-- [ISO 14001:2026 — Environmental management systems — Requirements with guidance for use](https://www.iso.org/standard/14001)
-- [ISO announcement: ISO 14001:2026 published on 15 April 2026](https://www.iso.org/news/2026/04/iso-14001-2026-published)
-- [Global ACI: Transition Requirements for ISO 14001:2026](https://global-aci.org/en/news/global-aci-publishes-transition-requirements-for-iso-140012026/)

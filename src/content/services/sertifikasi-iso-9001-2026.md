@@ -17,6 +17,11 @@ category: "Sistem Manajemen Mutu"
 categoryIds:
   - "quality-management"
 blocks:
+  - type: "hero"
+    id: "hero-layanan"
+    eyebrow: "Sistem Manajemen Mutu"
+    title: "Sertifikasi Sistem Manajemen Mutu ISO 9001:2026"
+    description: "Sertifikasi Sistem Manajemen Mutu ISO 9001:2026 adalah proses penilaian kesesuaian oleh lembaga sertifikasi terhadap sistem manajemen mutu organisasi berdasarkan persyaratan edisi ISO 9001 yang berlaku."
   - type: "content-section"
     id: "iso9001-standar-terkini"
     surface: "blue"
@@ -54,6 +59,28 @@ blocks:
         description: "Gunakan publikasi ISO dan dokumen transisi dari badan akreditasi yang relevan sebagai sumber utama."
       - title: "Rencanakan transisi"
         description: "Organisasi bersertifikat perlu mengatur penyesuaian sistem dan waktu audit transisi sesuai ketentuan lembaga sertifikasi penerbit."
+  - type: "content-section"
+    id: "status-pengembangan-layanan"
+    surface: "white"
+    title: "Status pengembangan layanan"
+    description: "Informasi pada halaman ini disusun untuk pengembangan katalog layanan. Layanan sertifikasi ISO 9001:2026 TNCV belum dinyatakan tersedia. Katalog internal masih mencatat skema ISO 9001 sebagai rencana, dan ruang lingkup serta kewenangan yang diperlukan masih harus diverifikasi. Publikasi halaman ini tidak merupakan pernyataan bahwa TNCV telah memperoleh akreditasi, pengakuan, atau kewenangan untuk menerbitkan sertifikat ISO 9001:2026."
+  - type: "content-section"
+    id: "proses-sertifikasi-umum"
+    surface: "navy"
+    title: "Proses sertifikasi secara umum"
+    description: "Apabila layanan kelak disetujui dan tersedia, proses sertifikasi sistem manajemen mutu pada umumnya mencakup pengajuan, penetapan ruang lingkup, perencanaan audit, audit tahap pertama bila berlaku, audit tahap kedua, penyelesaian temuan, tinjauan keputusan sertifikasi, dan surveilans sesuai siklus sertifikasi. Ketentuan aktual akan mengikuti skema, standar, dan prosedur lembaga sertifikasi yang berwenang."
+  - type: "link-grid"
+    id: "referensi-resmi"
+    surface: "cream"
+    title: "Referensi resmi"
+    items:
+      - title: "ISO 9001:2026 — Quality management systems — Requirements"
+        href: "https://www.iso.org/standard/9001"
+      - title: "ISO announcement: ISO 9001:2026 published on 16 September 2026"
+        href: "https://www.iso.org/news/2026/09/ISO9001-2026"
+      - title: "ISO/TC 176/SC 2 — ISO 9001:2026 transition guidance"
+        href: "https://committee.iso.org/sites/tc176sc2/home/news/content-left-area/news-and-updates/news-2.html"
+
   - type: "faq"
     id: "faq"
     surface: "coral"
@@ -64,24 +91,6 @@ blocks:
         answer: "Organisasi yang telah tersertifikasi perlu menyelesaikan transisi sesuai jadwal dan ketentuan yang berlaku. Batas global yang diumumkan adalah 30 September 2029, dengan penerapan mengikuti persyaratan transisi yang relevan."
       - question: "Apakah TNCV saat ini menerima permohonan sertifikasi ISO 9001:2026?"
         answer: "Halaman ini masih berstatus draft. Ketersediaan layanan, ruang lingkup, dan kewenangan TNCV belum dinyatakan disetujui untuk publikasi. Informasi resmi hanya akan ditampilkan setelah proses verifikasi internal selesai."
+relatedArticles:
+  title: "Artikel Terkait"
 ---
-# Sertifikasi Sistem Manajemen Mutu ISO 9001:2026
-
-Sertifikasi Sistem Manajemen Mutu ISO 9001:2026 adalah proses penilaian kesesuaian oleh lembaga sertifikasi terhadap sistem manajemen mutu organisasi berdasarkan persyaratan edisi ISO 9001 yang berlaku.
-
-## Status pengembangan layanan
-
-Informasi pada halaman ini disusun untuk pengembangan katalog layanan. **Layanan sertifikasi ISO 9001:2026 TNCV belum dinyatakan tersedia.** Katalog internal masih mencatat skema ISO 9001 sebagai rencana, dan ruang lingkup serta kewenangan yang diperlukan masih harus diverifikasi.
-
-Publikasi halaman ini tidak merupakan pernyataan bahwa TNCV telah memperoleh akreditasi, pengakuan, atau kewenangan untuk menerbitkan sertifikat ISO 9001:2026.
-
-## Proses sertifikasi secara umum
-
-Apabila layanan kelak disetujui dan tersedia, proses sertifikasi sistem manajemen mutu pada umumnya mencakup pengajuan, penetapan ruang lingkup, perencanaan audit, audit tahap pertama bila berlaku, audit tahap kedua, penyelesaian temuan, tinjauan keputusan sertifikasi, dan surveilans sesuai siklus sertifikasi. Ketentuan aktual akan mengikuti skema, standar, dan prosedur lembaga sertifikasi yang berwenang.
-
-## Referensi resmi
-
-- [ISO 9001:2026 — Quality management systems — Requirements](https://www.iso.org/standard/9001)
-- [ISO announcement: ISO 9001:2026 published on 16 September 2026](https://www.iso.org/news/2026/09/ISO9001-2026)
-- [ISO/TC 176/SC 2 — ISO 9001:2026 transition guidance](https://committee.iso.org/sites/tc176sc2/home/news/content-left-area/news-and-updates/news-2.html)
-

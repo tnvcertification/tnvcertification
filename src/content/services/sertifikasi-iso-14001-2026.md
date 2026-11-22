@@ -17,6 +17,11 @@ category: "Sistem Manajemen Lingkungan"
 categoryIds:
   - "environmental-management"
 blocks:
+  - type: "hero"
+    id: "hero-layanan"
+    eyebrow: "Sistem Manajemen Lingkungan"
+    title: "Sertifikasi Sistem Manajemen Lingkungan ISO 14001:2026"
+    description: "Sertifikasi Sistem Manajemen Lingkungan ISO 14001:2026 adalah penilaian kesesuaian independen terhadap sistem manajemen lingkungan organisasi berdasarkan persyaratan edisi terbaru ISO 14001."
   - type: "content-section"
     id: "iso14001-standar-terkini"
     surface: "blue"
@@ -90,6 +95,28 @@ blocks:
         description: "Gunakan publikasi ISO, persyaratan transisi badan akreditasi yang relevan, serta pemberitahuan resmi lembaga sertifikasi penerbit sebagai acuan."
       - title: "Rencanakan audit transisi"
         description: "Waktu dan metode audit transisi ditentukan sesuai ketentuan yang berlaku dan siklus sertifikasi organisasi."
+  - type: "content-section"
+    id: "status-pengembangan-layanan"
+    surface: "white"
+    title: "Status pengembangan layanan"
+    description: "Informasi pada halaman ini disusun untuk pengembangan katalog layanan. Layanan sertifikasi ISO 14001:2026 PT. Intiprima Sertifikasi belum dinyatakan tersedia. Ruang lingkup, status skema, dan kewenangan yang diperlukan masih harus diverifikasi sebelum halaman dapat dipublikasikan. Publikasi halaman ini kelak tidak boleh ditafsirkan sebagai pernyataan bahwa PT. Intiprima Sertifikasi telah memperoleh akreditasi, pengakuan, atau kewenangan untuk menerbitkan sertifikat ISO 14001:2026."
+  - type: "content-section"
+    id: "proses-sertifikasi-umum"
+    surface: "navy"
+    title: "Proses sertifikasi secara umum"
+    description: "Apabila layanan disetujui dan tersedia, proses sertifikasi sistem manajemen lingkungan pada umumnya mencakup permohonan, penetapan ruang lingkup, perencanaan audit, audit tahap pertama bila berlaku, audit tahap kedua, penyelesaian temuan, tinjauan keputusan sertifikasi, dan surveilans sesuai siklus sertifikasi. Ketentuan aktual mengikuti skema, standar, dan prosedur lembaga sertifikasi yang berwenang."
+  - type: "link-grid"
+    id: "referensi-resmi"
+    surface: "cream"
+    title: "Referensi resmi"
+    items:
+      - title: "ISO 14001:2026 — Environmental management systems — Requirements with guidance for use"
+        href: "https://www.iso.org/standard/14001"
+      - title: "ISO announcement: ISO 14001:2026 published on 15 April 2026"
+        href: "https://www.iso.org/news/2026/04/iso-14001-2026-published"
+      - title: "Global ACI: Transition Requirements for ISO 14001:2026"
+        href: "https://global-aci.org/en/news/global-aci-publishes-transition-requirements-for-iso-140012026/"
+
   - type: "faq"
     id: "faq"
     surface: "white"
@@ -102,23 +129,6 @@ blocks:
         answer: "Tidak serta-merta. Sertifikat dan proses transisi mengikuti ketentuan transisi yang berlaku. Organisasi harus mengonfirmasi jadwal dan persyaratan kepada lembaga sertifikasi penerbit."
       - question: "Apakah TNCV saat ini menerima permohonan sertifikasi ISO 14001:2026?"
         answer: "Halaman ini masih berstatus draft untuk pengembangan konten. Ketersediaan layanan, ruang lingkup, dan kewenangan PT. Intiprima Sertifikasi belum dinyatakan disetujui untuk publikasi. Informasi layanan hanya akan ditampilkan setelah verifikasi internal selesai."
+relatedArticles:
+  title: "Artikel Terkait"
 ---
-# Sertifikasi Sistem Manajemen Lingkungan ISO 14001:2026
-
-Sertifikasi Sistem Manajemen Lingkungan ISO 14001:2026 adalah penilaian kesesuaian independen terhadap sistem manajemen lingkungan organisasi berdasarkan persyaratan edisi terbaru ISO 14001.
-
-## Status pengembangan layanan
-
-Informasi pada halaman ini disusun untuk pengembangan katalog layanan. **Layanan sertifikasi ISO 14001:2026 PT. Intiprima Sertifikasi belum dinyatakan tersedia.** Ruang lingkup, status skema, dan kewenangan yang diperlukan masih harus diverifikasi sebelum halaman dapat dipublikasikan.
-
-Publikasi halaman ini kelak tidak boleh ditafsirkan sebagai pernyataan bahwa PT. Intiprima Sertifikasi telah memperoleh akreditasi, pengakuan, atau kewenangan untuk menerbitkan sertifikat ISO 14001:2026.
-
-## Proses sertifikasi secara umum
-
-Apabila layanan disetujui dan tersedia, proses sertifikasi sistem manajemen lingkungan pada umumnya mencakup permohonan, penetapan ruang lingkup, perencanaan audit, audit tahap pertama bila berlaku, audit tahap kedua, penyelesaian temuan, tinjauan keputusan sertifikasi, dan surveilans sesuai siklus sertifikasi. Ketentuan aktual mengikuti skema, standar, dan prosedur lembaga sertifikasi yang berwenang.
-
-## Referensi resmi
-
-- [ISO 14001:2026 — Environmental management systems — Requirements with guidance for use](https://www.iso.org/standard/14001)
-- [ISO announcement: ISO 14001:2026 published on 15 April 2026](https://www.iso.org/news/2026/04/iso-14001-2026-published)
-- [Global ACI: Transition Requirements for ISO 14001:2026](https://global-aci.org/en/news/global-aci-publishes-transition-requirements-for-iso-140012026/)

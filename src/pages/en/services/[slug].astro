@@ -1,7 +1,10 @@
 ---
-import { render } from "astro:content";
 import ServiceLayout from "../../../layouts/ServiceLayout.astro";
+import ArticleCard from "../../../components/ArticleCard.astro";
+import { getPublishedArticles, getRelatedArticles } from "../../../data/articles";
 import { getPublishedServices, servicePath } from "../../../data/services";
+import type { HeroBlock } from "../../../data/pages";
+import { siteCrumb } from "../../../data/breadcrumbs";
 import { servicePageJsonLd } from "../../../lib/structured-data";
 
 export async function getStaticPaths() {
@@ -9,7 +12,8 @@ export async function getStaticPaths() {
   return services.map((service) => ({ params: { slug: service.data.slug }, props: { service } }));
 }
 const { service } = Astro.props;
-const { Content } = await render(service);
+const serviceId = service.data.id;
+const relatedArticles = serviceId ? getRelatedArticles(getPublishedArticles(), serviceId) : [];
 const structuredData = servicePageJsonLd({
   name: service.data.title,
   description: service.data.metaDescription,
@@ -18,6 +22,10 @@ const structuredData = servicePageJsonLd({
   serviceType: service.data.serviceType,
   category: service.data.category,
 });
+const allBlocks = service.data.blocks ?? [];
+const hero = allBlocks.find((block): block is HeroBlock => block.type === "hero");
+if (!hero) throw new Error(`Service "${serviceId}" is missing a hero block.`);
+const blocks = allBlocks.filter((block) => block.type !== "hero");
 ---
 
 <ServiceLayout
@@ -27,8 +35,17 @@ const structuredData = servicePageJsonLd({
   canonical={servicePath(service.data)}
   ogImage={service.data.featuredImage.src}
   imageAlt={service.data.featuredImage.alt}
-  blocks={service.data.blocks}
+  breadcrumbs={[siteCrumb("/"), siteCrumb("/services/"), { label: service.data.title }]}
+  hero={hero}
+  blocks={blocks}
   structuredData={structuredData}
 >
-  <Content />
+  {relatedArticles.length > 0 && service.data.relatedArticles && (
+    <section class="mt-16" aria-labelledby="artikel-terkait">
+      <h2 id="artikel-terkait" class="text-2xl font-semibold text-brand-deepblue">{service.data.relatedArticles.title}</h2>
+      <div class="mt-6 grid gap-8 md:grid-cols-2">
+        {relatedArticles.map((article) => <ArticleCard article={article} />)}
+      </div>
+    </section>
+  )}
 </ServiceLayout>
