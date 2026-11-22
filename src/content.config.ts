@@ -71,7 +71,7 @@ const ctaBlock = z.object({
   link: z
     .object({
       label: z.string().min(1),
-      url: z.string().url(),
+      url: z.string().min(1),
     })
     .optional(),
 });
@@ -115,6 +115,8 @@ const listingBlock = z.object({
   emptyDescription: z.string().optional(),
   emptyActionLabel: z.string().optional(),
   emptyActionHref: z.string().optional(),
+  actionLabel: z.string().optional(),
+  actionHref: z.string().optional(),
 });
 
 const contactBlock = z.object({

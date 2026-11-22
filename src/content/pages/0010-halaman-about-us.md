@@ -10,6 +10,16 @@ featuredImage:
 slug: "about-us"
 translationKey: "page-hal-about-us"
 lang: "id"
+blocks:
+  - type: contact
+    id: kontak-intiprima
+    eyebrow: "Hubungi kami"
+    title: "Hubungi Intiprima Sertifikasi"
+    description: "Gunakan kanal kontak berikut untuk menanyakan informasi sertifikasi, proses audit, atau persyaratan administratif. Detail kontak ditampilkan sesuai data resmi perusahaan."
+    labels:
+      email: "Email"
+      phone: "Telepon"
+      address: "Alamat"
 ---
 # Tentang Intiprima Sertifikasi
 
