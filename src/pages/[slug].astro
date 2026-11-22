@@ -4,10 +4,13 @@ import ArticleLayout from "../layouts/ArticleLayout.astro";
 import WidePageLayout from "../layouts/WidePageLayout.astro";
 import FeaturedImage from "../components/FeaturedImage.astro";
 import Section from "../components/Section.astro";
+import { routeOwnedPageSlugs } from "../data/pages";
 
 export async function getStaticPaths() {
   const pages = await getCollection("pages", ({ data }) => data.draft !== true);
-  return pages.map((entry) => ({ params: { slug: entry.data.slug }, props: { entry } }));
+  return pages
+    .filter((entry) => !routeOwnedPageSlugs.includes(entry.data.slug))
+    .map((entry) => ({ params: { slug: entry.data.slug }, props: { entry } }));
 }
 const { entry } = Astro.props;
 const { Content } = await render(entry);

@@ -76,7 +76,73 @@ const ctaBlock = z.object({
     .optional(),
 });
 
+// --- Page structure blocks (development-mode combined page pattern) ---
+const heroBlock = z.object({
+  type: z.literal("hero"),
+  id: blockIdSchema.optional(),
+  surface: sectionSurfaceSchema.optional(),
+  eyebrow: z.string().optional(),
+  title: z.string().min(1),
+  description: z.string().optional(),
+  image: z.string().optional(),
+  imageAlt: z.string().optional(),
+});
+
+const linkGridBlock = z.object({
+  type: z.literal("link-grid"),
+  id: blockIdSchema.optional(),
+  surface: sectionSurfaceSchema.optional(),
+  eyebrow: z.string().optional(),
+  title: z.string().optional(),
+  items: z.array(z.object({
+    eyebrow: z.string().optional(),
+    title: z.string().min(1),
+    description: z.string().optional(),
+    href: z.string().min(1),
+    actionLabel: z.string().optional(),
+  })).min(1),
+});
+
+const listingBlock = z.object({
+  type: z.literal("listing"),
+  id: blockIdSchema.optional(),
+  surface: sectionSurfaceSchema.optional(),
+  source: z.enum(["services", "trainings", "schedules", "articles"]),
+  eyebrow: z.string().optional(),
+  title: z.string().optional(),
+  description: z.string().optional(),
+  emptyTitle: z.string().optional(),
+  emptyDescription: z.string().optional(),
+  emptyActionLabel: z.string().optional(),
+  emptyActionHref: z.string().optional(),
+});
+
+const contactBlock = z.object({
+  type: z.literal("contact"),
+  id: blockIdSchema.optional(),
+  surface: sectionSurfaceSchema.optional(),
+  eyebrow: z.string().optional(),
+  title: z.string().min(1),
+  description: z.string().optional(),
+  labels: z.object({
+    email: z.string().optional(),
+    phone: z.string().optional(),
+    address: z.string().optional(),
+  }).optional(),
+});
+
 const blockSchema = z.discriminatedUnion("type", [contentSectionBlock, faqBlock, howToBlock, ctaBlock]);
+
+const pageBlockSchema = z.discriminatedUnion("type", [
+  heroBlock,
+  linkGridBlock,
+  listingBlock,
+  contactBlock,
+  contentSectionBlock,
+  faqBlock,
+  howToBlock,
+  ctaBlock,
+]);
 
 /**
  * Fields shared by every publishable page-like entry. Schedule and category
@@ -182,6 +248,7 @@ const trainingScheduleSchema = z.object({
 // --- General pages ---
 const pageSchema = baseEntrySchema.extend({
   draft: z.boolean().optional(),
+  blocks: z.array(pageBlockSchema).optional(),
 });
 
 function collection<T extends z.ZodTypeAny>(name: keyof typeof collectionRegistry, schema: T) {
