@@ -173,6 +173,8 @@ const articleSchema = baseEntrySchema.extend({
   categoryIds: z.array(z.string()).optional(),
   // Explicit optional association; never inferred from labels, categories or slugs.
   serviceId: z.number().int().positive().optional(),
+  // Frontmatter-only article pages: hero + content blocks replace the Markdown body.
+  blocks: z.array(pageBlockSchema).optional(),
 });
 
 // --- Services ---
@@ -182,7 +184,12 @@ const serviceSchema = baseEntrySchema.extend({
   categoryIds: z.array(z.string()).optional(),
   serviceType: z.string().optional(),
   category: z.string().optional(),
-  blocks: z.array(blockSchema).optional(),
+  // Frontmatter-only service pages: hero + content blocks replace the Markdown body.
+  blocks: z.array(pageBlockSchema).optional(),
+  relatedArticles: z.object({
+    title: z.string().min(1),
+    emptyTitle: z.string().optional(),
+  }).optional(),
 });
 
 // --- Certifications ---

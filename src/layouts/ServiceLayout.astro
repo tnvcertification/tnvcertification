@@ -4,6 +4,7 @@ import Breadcrumbs from "../components/Breadcrumbs.astro";
 import Container from "../components/Container.astro";
 import FeaturedImage from "../components/FeaturedImage.astro";
 import BlockRenderer, { type Block } from "../components/BlockRenderer.astro";
+import type { PageBlock } from "../data/pages";
 interface Props {
   title: string;
   description: string;
@@ -11,17 +12,26 @@ interface Props {
   canonical?: string;
   ogImage?: string;
   imageAlt: string;
-  blocks?: Block[];
+  blocks?: PageBlock[];
   structuredData?: unknown[];
 }
 const { title, description, lang, canonical, ogImage, imageAlt, blocks = [], structuredData = [] } = Astro.props;
+// Transitional: the service schema now permits page blocks, but BlockRenderer
+// still accepts only the legacy block types. Task 4 replaces this with PageBlockRenderer.
+const legacyBlocks = blocks.filter(
+  (block): block is PageBlock & Block =>
+    block.type === "content-section" ||
+    block.type === "faq" ||
+    block.type === "howto" ||
+    block.type === "cta",
+);
 ---
 <Layout title={title} description={description} lang={lang} canonical={canonical} ogImage={ogImage} structuredData={structuredData}>
   <Container as="article" variant="wide" gutter={false}>
     <Breadcrumbs items={[{ label: "Beranda", href: "/" }, { label: "Layanan", href: "/services/" }, { label: title }]} />
     {ogImage && <FeaturedImage src={ogImage} alt={imageAlt} priority class="mb-8 mt-8 max-w-5xl" />}
     <div class="prose mt-8 max-w-3xl"><slot /></div>
-    <BlockRenderer blocks={blocks} lang={lang} />
+    <BlockRenderer blocks={legacyBlocks} lang={lang} />
   </Container>
 </Layout>
 
