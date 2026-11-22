@@ -24,6 +24,13 @@ test("block catalogue lists the page structure block types", () => {
   }
 });
 
+test("architecture records the known development-mode limitations", () => {
+  assert.match(architecture, /Known development-mode limitations/);
+  assert.ok(architecture.includes("articles-archive-page-2.webp"));
+  assert.ok(architecture.includes("HomeHero.astro"));
+  assert.match(architecture, /not rendered yet/i);
+});
+
 test("bilingual standard records the ID-only page phase", () => {
   assert.match(bilingual, /page entries are ID-only/i);
 });

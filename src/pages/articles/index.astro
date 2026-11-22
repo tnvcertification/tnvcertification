@@ -33,7 +33,7 @@ const adjacent = getAdjacentPageHrefs(1, pageCount, "/articles/");
     {listings.map((block) => (
       <ListingSection block={block} hasItems={pageArticles.length > 0}>
         <div class="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
-          {pageArticles.map((article) => <ArticleCard article={article} />)}
+          {pageArticles.map((article) => <ArticleCard article={article} headingLevel={2} />)}
         </div>
       </ListingSection>
     ))}

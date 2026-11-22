@@ -47,8 +47,11 @@ for (const [directory, prefix] of routePrefixes) {
     const parsed = new Date(date);
     if (Number.isNaN(parsed.getTime())) continue;
 
+    // `home` is a page entry but its canonical URL is the site root, not /home/.
+    const urlPath = directory === "pages" && slug === "home" ? "/" : `${prefix}${slug}/`;
+
     // Keep UTC precision to the second, matching the authored metadata.
-    lastmodByUrl.set(`${prefix}${slug}/`, parsed.toISOString().replace(/\.\d{3}Z$/, "Z"));
+    lastmodByUrl.set(urlPath, parsed.toISOString().replace(/\.\d{3}Z$/, "Z"));
   }
 }
 

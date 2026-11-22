@@ -38,6 +38,12 @@ test("ListingSection renders its items through a slot and keeps empty copy in th
   assert.equal((source.match(/block\.emptyDescription/g) ?? []).length, 1);
 });
 
+test("LinkGrid only sets aria-labelledby when its heading renders", () => {
+  const source = files.LinkGrid;
+  assert.match(source, /const headingId = block\.title && block\.id \?/);
+  assert.doesNotMatch(source, /const headingId = block\.id \?/);
+});
+
 test("PageHero takes all visible copy from props", () => {
   const source = files.PageHero;
   assert.match(source, /fallbackImage/);

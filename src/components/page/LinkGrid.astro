@@ -7,7 +7,7 @@ interface Props {
 }
 
 const { block } = Astro.props;
-const headingId = block.id ? `${block.id}-heading` : undefined;
+const headingId = block.title && block.id ? `${block.id}-heading` : undefined;
 ---
 
 <Section id={block.id} aria-labelledby={headingId} spacing="spacious">

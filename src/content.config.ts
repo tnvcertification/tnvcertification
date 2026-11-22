@@ -2,6 +2,7 @@ import { defineCollection } from "astro/content/config";
 import { glob } from "astro/loaders";
 import { z } from "astro/zod";
 import { collectionRegistry } from "./data/collections";
+import { isSupportedLinkUrl } from "./lib/link-url";
 
 /**
  * Shared image-object schema (single primary / optional gallery).
@@ -71,7 +72,7 @@ const ctaBlock = z.object({
   link: z
     .object({
       label: z.string().min(1),
-      url: z.string().min(1),
+      url: z.string().refine(isSupportedLinkUrl, "link URL must be an absolute http(s) URL or a root-relative path"),
     })
     .optional(),
 });
@@ -98,7 +99,7 @@ const linkGridBlock = z.object({
     eyebrow: z.string().optional(),
     title: z.string().min(1),
     description: z.string().optional(),
-    href: z.string().min(1),
+    href: z.string().refine(isSupportedLinkUrl, "link href must be an absolute http(s) URL or a root-relative path"),
     actionLabel: z.string().optional(),
   })).min(1),
 });
