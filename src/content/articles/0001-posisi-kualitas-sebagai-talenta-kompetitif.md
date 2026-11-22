@@ -12,17 +12,17 @@ featuredImage:
 slug: "posisi-kualitas-sebagai-talenta-kompetitif"
 translationKey: "article-posisi-kualitas-sebagai-talenta-kompetitif"
 lang: "id"
+blocks:
+  - type: hero
+    id: hero-posisi-kualitas-sebagai-talenta-kompetitif
+    title: Posisi Kualitas sebagai Talenta Kompetitif
+    description: Posisi Kualitas sebagai Talenta Kompetitif adalah peran strategis dalam membangun kepercayaan dan daya saing organisasi melalui praktik mutu yang konsisten.
+  - type: content-section
+    id: 0001-nilai-yang-dibawa-talenta-kualitas
+    title: Nilai yang Dibawa Talenta Kualitas
+    description: Talenta kualitas menerjemahkan standar menjadi kebiasaan kerja sehari-hari. Mereka mengamati proses, mencatat penyimpangan, dan mengajak tim memperbaiki cara kerja sebelum masalah mencapai pelanggan.
+  - type: content-section
+    id: 0001-jalur-pengembangan-kompetensi
+    title: Jalur Pengembangan Kompetensi
+    description: Peran ini tumbuh melalui pelatihan berkelanjutan, pendampingan lapangan, dan pengukuran kinerja yang jelas. Organisasi yang memberi ruang belajar akan memiliki talenta yang mampu menjaga mutu sekaligus mendorong inovasi. "Mutu bukanlah peralatan, tetapi cara berpikir setiap pekerja."
 ---
-# Posisi Kualitas sebagai Talenta Kompetitif
-
-Posisi Kualitas sebagai Talenta Kompetitif adalah peran strategis dalam membangun kepercayaan dan daya saing organisasi melalui praktik mutu yang konsisten.
-
-## Nilai yang Dibawa Talenta Kualitas
-
-Talenta kualitas menerjemahkan standar menjadi kebiasaan kerja sehari-hari. Mereka mengamati proses, mencatat penyimpangan, dan mengajak tim memperbaiki cara kerja sebelum masalah mencapai pelanggan.
-
-## Jalur Pengembangan Kompetensi
-
-Peran ini tumbuh melalui pelatihan berkelanjutan, pendampingan lapangan, dan pengukuran kinerja yang jelas. Organisasi yang memberi ruang belajar akan memiliki talenta yang mampu menjaga mutu sekaligus mendorong inovasi.
-
-> "Mutu bukanlah peralatan, tetapi cara berpikir setiap pekerja."

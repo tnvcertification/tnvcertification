@@ -2,7 +2,9 @@
 import Layout from "./Layout.astro";
 import Breadcrumbs from "../components/Breadcrumbs.astro";
 import Container from "../components/Container.astro";
-import FeaturedImage from "../components/FeaturedImage.astro";
+import PageHero from "../components/page/PageHero.astro";
+import PageBlockRenderer from "../components/page/PageBlockRenderer.astro";
+import type { HeroBlock, PageBlock } from "../data/pages";
 import type { SeoAlternate } from "../lib/seo";
 interface Props {
   title: string;
@@ -13,34 +15,31 @@ interface Props {
   date: Date;
   imageAlt: string;
   alternates?: SeoAlternate[];
+  breadcrumbs?: Array<{ label: string; href?: string }>;
+  hero: HeroBlock;
+  blocks: PageBlock[];
 }
-const { title, description, lang = "id", canonical, ogImage, date, imageAlt, alternates = [] } = Astro.props;
-const homeLabel = lang === "en" ? "Home" : "Beranda";
-const archiveLabel = lang === "en" ? "Articles" : "Artikel";
+const {
+  title,
+  description,
+  lang = "id",
+  canonical,
+  ogImage,
+  date,
+  imageAlt,
+  alternates = [],
+  breadcrumbs = [],
+  hero,
+  blocks,
+} = Astro.props;
+const fallbackImage = { src: ogImage ?? "", alt: imageAlt };
 const dateFormatter = new Intl.DateTimeFormat(lang === "en" ? "en-US" : "id-ID", { day: "numeric", month: "long", year: "numeric", timeZone: "UTC" });
 ---
 <Layout title={title} description={description} lang={lang} canonical={canonical} ogImage={ogImage} alternates={alternates}>
   <Container as="article" variant="reading" gutter={false}>
-    <Breadcrumbs items={[{ label: homeLabel, href: "/" }, { label: archiveLabel, href: "/articles/" }, { label: title }]} />
-    {ogImage && <FeaturedImage src={ogImage} alt={imageAlt} priority class="mb-8 mt-8" />}
+    <Breadcrumbs items={breadcrumbs} lang={lang === "en" ? "en" : "id"} />
+    {hero && <PageHero block={hero} fallbackImage={fallbackImage} />}
     <p class="text-sm text-ink-subtle"><time datetime={date.toISOString().slice(0, 10)}>{dateFormatter.format(date)}</time></p>
-    <div class="prose mt-4"><slot /></div>
+    <PageBlockRenderer blocks={blocks} fallbackImage={fallbackImage} />
   </Container>
 </Layout>
-
-<style>
-  .prose :global(h1) {
-    margin: 0;
-    font-size: 1.875rem;
-    line-height: 1.2;
-    font-weight: 600;
-    letter-spacing: -0.025em;
-    color: var(--color-ink);
-  }
-  .prose :global(h1 + p) {
-    margin-top: 0.75rem;
-    font-size: 1.125rem;
-    line-height: 1.75;
-    color: var(--color-ink-muted);
-  }
-</style>

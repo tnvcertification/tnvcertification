@@ -1,6 +1,8 @@
 ---
-import { getCollection, render } from "astro:content";
+import { getCollection } from "astro:content";
 import ArticleLayout from "../../layouts/ArticleLayout.astro";
+import type { HeroBlock, PageBlock } from "../../data/pages";
+import { siteCrumb } from "../../data/breadcrumbs";
 
 export async function getStaticPaths() {
   const articles = await getCollection("articles", ({ data }) => data.draft !== true);
@@ -26,8 +28,11 @@ export async function getStaticPaths() {
   });
 }
 const { entry, alternates, pubDate, featuredImage } = Astro.props;
-const { Content } = await render(entry);
 const canonical = `/articles/${entry.data.slug}/`;
+const allBlocks = entry.data.blocks ?? [];
+const hero = allBlocks.find((block): block is HeroBlock => block.type === "hero");
+if (!hero) throw new Error(`Article "${entry.id}" is missing a hero block.`);
+const blocks: PageBlock[] = allBlocks.filter((block) => block.type !== "hero");
 ---
 
 <ArticleLayout
@@ -39,6 +44,7 @@ const canonical = `/articles/${entry.data.slug}/`;
   date={entry.data.updatedDate ?? pubDate}
   imageAlt={featuredImage.alt}
   alternates={alternates}
->
-  <Content />
-</ArticleLayout>
+  breadcrumbs={[siteCrumb("/"), siteCrumb("/articles/"), { label: entry.data.title }]}
+  hero={hero}
+  blocks={blocks}
+/>
