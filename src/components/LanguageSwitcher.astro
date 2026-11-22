@@ -1,0 +1,54 @@
+---
+import { getLanguageOptions } from "../data/locale-switch";
+import { siteSettings } from "../site";
+
+interface Props {
+  lang: string;
+}
+
+const { lang } = Astro.props;
+const options = await getLanguageOptions(Astro.url.pathname, lang);
+
+type SwitcherLang = keyof typeof siteSettings.languageSwitcher.ariaLabel;
+const activeLang = options.find((option) => option.active)?.lang ?? siteSettings.defaultLanguage;
+const uiLang: SwitcherLang =
+  activeLang in siteSettings.languageSwitcher.ariaLabel
+    ? (activeLang as SwitcherLang)
+    : siteSettings.defaultLanguage;
+const ariaLabel = siteSettings.languageSwitcher.ariaLabel[uiLang];
+const unavailableText = siteSettings.languageSwitcher.unavailable[uiLang];
+---
+
+<nav aria-label={ariaLabel}>
+  <ul class="flex items-center gap-1 text-sm font-semibold">
+    {
+      options.map((option) => (
+        <li class="flex">
+          {option.available ? (
+            <a
+              href={option.href}
+              aria-current={option.active ? "page" : undefined}
+              class:list={[
+                "inline-flex min-h-11 items-center border-b-2 px-3 py-2 transition-colors",
+                "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-blue",
+                option.active
+                  ? "border-brand-deepblue text-brand-deepblue"
+                  : "border-transparent text-ink-muted hover:border-border-strong hover:text-ink",
+              ]}
+            >
+              {option.label}
+            </a>
+          ) : (
+            <span
+              aria-disabled="true"
+              class="inline-flex min-h-11 items-center border-b-2 border-transparent px-3 py-2 text-ink-subtle"
+            >
+              {option.label}
+              <span class="sr-only"> — {unavailableText}</span>
+            </span>
+          )}
+        </li>
+      ))
+    }
+  </ul>
+</nav>

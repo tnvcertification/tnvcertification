@@ -42,7 +42,7 @@ const jsonLd = serializeJsonLd(pageJsonLdGraph(structuredData));
     <a href="#main-content" class="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-50 focus:rounded-lg focus:bg-white focus:px-4 focus:py-3 focus:text-brand-deepblue focus:shadow-lg">
       Lewati ke konten utama
     </a>
-    <SiteHeader />
+    <SiteHeader lang={seo.lang} />
     <main id="main-content" class="flex w-full flex-1">
       <Container variant="landing" class="py-8 sm:py-10 lg:py-12">
         <slot />
