@@ -77,6 +77,62 @@ export function parseContent(body: string): ParsedContent {
   };
 }
 
+/**
+ * Derive the document structure from frontmatter blocks when an entry has no
+ * Markdown body. Levels mirror the rendered block components: hero → H1,
+ * section-like blocks → H2, their items/steps → H3.
+ */
+export function parseFrontmatterContent(data: Record<string, unknown>): ParsedContent {
+  const blocks = Array.isArray(data.blocks) ? data.blocks : [];
+  const lang = toStr(data.lang, "id").toLowerCase().split("-")[0];
+  const faqHeading = lang === "en" ? "FAQ" : "Pertanyaan umum";
+  const ctaHeading = lang === "en" ? "Call to action" : "Ajukan Sertifikasi";
+  const headings: Heading[] = [];
+  const introParagraphs: string[] = [];
+
+  for (const raw of blocks) {
+    if (typeof raw !== "object" || raw === null || Array.isArray(raw)) continue;
+    const block = raw as Record<string, unknown>;
+    const type = toStr(block.type);
+    const headingText = toStr(block.title) || toStr(block.eyebrow);
+
+    if (type === "hero") {
+      headings.push({ level: 1, text: toStr(block.title) || toStr(data.title) });
+      const description = toStr(block.description);
+      if (description) introParagraphs.push(description);
+      continue;
+    }
+
+    let sectionHeading: string | null = null;
+    let children: unknown[] = [];
+    if (type === "content-section") {
+      sectionHeading = headingText || type;
+      children = Array.isArray(block.items) ? block.items : [];
+    } else if (type === "faq") {
+      sectionHeading = headingText || faqHeading;
+    } else if (type === "howto") {
+      sectionHeading = headingText || type;
+      children = Array.isArray(block.steps) ? block.steps : [];
+    } else if (type === "cta") {
+      sectionHeading = headingText || ctaHeading;
+    } else if (type === "link-grid") {
+      sectionHeading = headingText || null;
+      children = Array.isArray(block.items) ? block.items : [];
+    } else if (type === "listing" || type === "contact") {
+      sectionHeading = headingText || null;
+    }
+
+    if (sectionHeading) headings.push({ level: 2, text: sectionHeading });
+    for (const rawChild of children) {
+      if (typeof rawChild !== "object" || rawChild === null || Array.isArray(rawChild)) continue;
+      const child = rawChild as Record<string, unknown>;
+      headings.push({ level: 3, text: toStr(child.title) || toStr(child.question) || type });
+    }
+  }
+
+  return { headings, intro: introParagraphs[0] ?? null, introParagraphs };
+}
+
 function toStr(value: unknown, fallback = ""): string {
   return typeof value === "string" ? value : fallback;
 }
@@ -126,29 +182,36 @@ export function validateEntry(entry: ContentEntryLike): Diagnostic[] {
     );
   }
 
-  const { headings, intro, introParagraphs } = parseContent(entry.body ?? "");
+  const hasBody = (entry.body ?? "").trim().length > 0;
+  const structureField = hasBody ? "body" : "blocks";
+  const { headings, intro, introParagraphs } = hasBody
+    ? parseContent(entry.body ?? "")
+    : parseFrontmatterContent(data);
   const effectiveIntro = introField || intro;
 
-  // CONTENT-001: an H1 must exist.
+  // CONTENT-001: an H1 must exist, from the body or from the hero block.
   if (!headings.some((h) => h.level === 1)) {
-    add("body", "CONTENT-001", "Missing H1. The page must start with an H1 heading.");
+    add(structureField, "CONTENT-001", "Missing H1. The page must start with an H1 heading.");
   }
 
-  // CONTENT-002: exactly one intro paragraph immediately after H1, matching the field.
+  // CONTENT-002: an intro field is always required. Body-based entries additionally
+  // need exactly one intro paragraph immediately after H1 that matches the field.
   if (!introField) {
     add("intro", "CONTENT-002", "The `intro` field is required.");
   }
-  if (!intro) {
-    add("intro", "CONTENT-002", "No introductory paragraph immediately after H1.");
-  } else if (introParagraphs.length !== 1) {
-    add(
-      "intro",
-      "CONTENT-002",
-      `Expected exactly one intro paragraph after H1; found ${introParagraphs.length}.`,
-    );
-  }
-  if (introField && intro && introField.trim() !== intro.trim()) {
-    add("intro", "CONTENT-002", "The `intro` field must match the first paragraph after H1.");
+  if (hasBody) {
+    if (!intro) {
+      add("intro", "CONTENT-002", "No introductory paragraph immediately after H1.");
+    } else if (introParagraphs.length !== 1) {
+      add(
+        "intro",
+        "CONTENT-002",
+        `Expected exactly one intro paragraph after H1; found ${introParagraphs.length}.`,
+      );
+    }
+    if (introField && intro && introField.trim() !== intro.trim()) {
+      add("intro", "CONTENT-002", "The `intro` field must match the first paragraph after H1.");
+    }
   }
 
   // CONTENT-003: the intro begins with the title and a language-appropriate copula.
@@ -255,7 +318,7 @@ export function validateEntry(entry: ContentEntryLike): Diagnostic[] {
     if (!prev || !next) continue;
     if (next.level > prev.level && next.level - prev.level > 1) {
       add(
-        "body",
+        structureField,
         "CONTENT-011",
         `Heading level skipped: H${prev.level} cannot be followed directly by H${next.level}.`,
         { headingText: next.text, expectedLevel: prev.level + 1 },
@@ -264,6 +327,20 @@ export function validateEntry(entry: ContentEntryLike): Diagnostic[] {
   }
 
   return diagnostics;
+}
+
+/** CONTENT-014: editorial entries must be frontmatter-only (no Markdown body). */
+export function validateFrontmatterOnlyEntries(entries: ContentEntryLike[]): Diagnostic[] {
+  return entries.flatMap((entry) => {
+    if (!toStr(entry.data?.title) || !(entry.body ?? "").trim()) return [];
+    return [{
+      entry: entry.id,
+      path: entry.path ?? entry.id,
+      field: "body",
+      rule: "CONTENT-014",
+      reason: "Editorial entries must contain frontmatter only; remove the Markdown body.",
+    }];
+  });
 }
 
 export function validateAllEntries(entries: ContentEntryLike[]): Diagnostic[] {

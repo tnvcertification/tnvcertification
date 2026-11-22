@@ -211,3 +211,50 @@ test("certification-focused wording passes consultation terminology validation",
   }));
   assert.equal(diagnostics.filter((d) => d.rule === "CONTENT-013").length, 0);
 });
+
+test("body-less entry with a hero and valid block headings has no CONTENT-001/002/011", () => {
+  const diagnostics = validateEntry(makeEntry({
+    body: "",
+    data: {
+      blocks: [
+        { type: "hero", title: "Judul Uji", description: "Judul Uji adalah intro yang menjelaskan topik halaman ini." },
+        {
+          type: "content-section",
+          title: "Bagian pertama",
+          items: [
+            { title: "Item satu", description: "Penjelasan item satu." },
+            { title: "Item dua", description: "Penjelasan item dua." },
+          ],
+        },
+      ],
+    },
+  }));
+  const structural = diagnostics.filter((d) => ["CONTENT-001", "CONTENT-002", "CONTENT-011"].includes(d.rule));
+  assert.deepEqual(structural, []);
+});
+
+test("body-less entry with a skipped block heading reports CONTENT-011 on blocks", () => {
+  const diagnostics = validateEntry(makeEntry({
+    body: "",
+    data: {
+      blocks: [
+        { type: "hero", title: "Judul Uji" },
+        { type: "link-grid", items: [{ title: "Tautan", href: "https://example.com" }] },
+      ],
+    },
+  }));
+  const found = diagnostics.find((d) => d.rule === "CONTENT-011");
+  assert.ok(found, "expected CONTENT-011 diagnostic");
+  assert.equal(found.field, "blocks");
+  assert.equal(found.expectedLevel, 2);
+});
+
+test("body-less entry without hero reports CONTENT-001 on blocks", () => {
+  const diagnostics = validateEntry(makeEntry({
+    body: "",
+    data: { blocks: [{ type: "content-section", title: "Bagian tanpa H1" }] },
+  }));
+  const found = diagnostics.find((d) => d.rule === "CONTENT-001");
+  assert.ok(found, "expected CONTENT-001 diagnostic");
+  assert.equal(found.field, "blocks");
+});
