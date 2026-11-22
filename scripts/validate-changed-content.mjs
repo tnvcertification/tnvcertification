@@ -6,7 +6,7 @@
 import { execFileSync } from "node:child_process";
 import { readFileSync } from "node:fs";
 import { parse as parseYaml } from "yaml";
-import { validateEntry } from "../src/lib/content-validation.ts";
+import { validateEntry, validateFrontmatterOnlyEntries } from "../src/lib/content-validation.ts";
 import { editorialCollections } from "../src/data/collections.ts";
 
 const [base, head = "HEAD"] = process.argv.slice(2);
@@ -73,9 +73,13 @@ function parseEntry(path, collection) {
 
 try {
   const files = changedEditorialFiles();
-  const diagnostics = files.flatMap(({ path, collection }) =>
-    validateEntry(parseEntry(path, collection)),
-  );
+  const diagnostics = files.flatMap(({ path, collection }) => {
+    const entry = parseEntry(path, collection);
+    return [
+      ...validateEntry(entry),
+      ...validateFrontmatterOnlyEntries([entry]),
+    ];
+  });
 
   console.log("Selective editorial validation: " + files.length + " changed file(s).");
   if (diagnostics.length > 0) {

@@ -47,11 +47,17 @@ intro: Audit Keselamatan adalah proses evaluasi sistematis.
 metaDescription: Panduan audit keselamatan untuk organisasi.
 featuredImage:
   src: /images/audit.webp
-  alt: Ilustrasi Audit Keselamatan adalah pemeriksaan.
+  alt: Audit Keselamatan adalah pemeriksaan sistematis.
+blocks:
+  - type: hero
+    id: hero-audit
+    title: Audit Keselamatan
+    description: Audit Keselamatan adalah proses evaluasi sistematis.
+  - type: content-section
+    id: ruang-lingkup-audit
+    title: Ruang lingkup audit
+    description: Penilaian dilakukan terhadap proses yang relevan.
 ---
-# Audit Keselamatan
-
-Audit Keselamatan adalah proses evaluasi sistematis.
 `;
 
 test("changed valid editorial Markdown passes the real preflight CLI", () => {
@@ -97,9 +103,13 @@ intro: Audit Keselamatan adalah proses evaluasi sistematis.
 metaDescription: Panduan audit keselamatan untuk organisasi.
 featuredImage:
   src: /images/audit.webp
-  alt: Ilustrasi Audit Keselamatan adalah pemeriksaan.
+  alt: Audit Keselamatan adalah pemeriksaan sistematis.
+blocks:
+  - type: content-section
+    id: ruang-lingkup-audit
+    title: Ruang lingkup audit
+    description: Penilaian dilakukan terhadap proses yang relevan.
 ---
-Teks tanpa heading utama.
 `);
     const result = runNode(validator, cwd, [base, "HEAD"], true);
     assert.notEqual(result.status, 0);

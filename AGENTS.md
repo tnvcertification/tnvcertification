@@ -26,6 +26,7 @@ This combined pattern is still in development and is not a final architecture de
 - `site.ts` remains the single source of truth for company identity, contact details, navigation, and shared settings. Page frontmatter must not duplicate those values; components read them from `site.ts`.
 - `src/data/pages.ts` exports the shared selectors and `routeOwnedPageSlugs`; dedicated routes own their slugs and the generic `[slug].astro` must skip them.
 - Blocks are discriminated and typed: `hero`, `link-grid`, `listing`, `contact`, plus the existing `content-section`, `faq`, `howto`, and `cta`. See `docs/components-blocks-layouts.md`.
+- Editorial `.md` entries (pages, services, articles) contain frontmatter blocks only and no Markdown body. A re-added body is rejected at build time and in changed-content preflight by CONTENT-014. Author the H1, intro and featured image as a `hero` block; `/services/` is the canonical example.
 - Page entries are ID-only in this phase; English fallbacks are redirect stubs, not translated page entries.
 
 ## Mandatory editorial content rules

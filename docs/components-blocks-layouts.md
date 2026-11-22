@@ -21,6 +21,8 @@
 
 This combined page pattern is provisional; do not treat it as a final universal layout abstraction.
 
+All editorial `.md` entries — pages, services, and articles — contain frontmatter blocks only and no Markdown body; CONTENT-014 enforces this at build time and in changed-content preflight. The `hero` block carries the H1, introductory paragraph, and image (falling back to `featuredImage`). Use `/services/` (`hero-layanan`) as the canonical hero example, not `/csms/`.
+
 ## Layouts
 - Choose layouts by page purpose, not convenience.
 - Certification, article, training, schedule, and corporate pages should have distinct hierarchies and layouts.

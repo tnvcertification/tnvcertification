@@ -9,7 +9,7 @@
 import { globSync } from "tinyglobby";
 import { readFileSync } from "node:fs";
 import { parse as parseYaml } from "yaml";
-import { validateAllEntries, type ContentEntryLike } from "./lib/content-validation";
+import { validateAllEntries, validateFrontmatterOnlyEntries, type ContentEntryLike } from "./lib/content-validation";
 import { validateTaxonomy, type TaxonomyRecordLike } from "./lib/taxonomy-validation";
 import { certificationSchemes } from "./data/certification-schemes";
 import { validateCertificationSchemes } from "./lib/certification-scheme-validation";
@@ -97,6 +97,7 @@ export const contentValidationIntegration = {
       const categories = loadCategoryEntries();
       const diagnostics = [
         ...validateAllEntries(contentEntries),
+        ...validateFrontmatterOnlyEntries(contentEntries),
         ...validateTaxonomy(categories, contentEntries),
         ...validateBlockIds(contentEntries.map((entry) => ({ path: entry.path ?? entry.id, data: entry.data }))),
       ];

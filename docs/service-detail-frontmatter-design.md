@@ -2,7 +2,7 @@
 
 ## Status
 
-Desain disetujui dengan koreksi: **tidak ada body Markdown lagi di file `.md`**. Contoh visual dan struktural adalah `/services/` (`hero-layanan`), bukan `/csms/`.
+**Diimplementasikan.** Seluruh 22 entri editorial kini hanya berisi frontmatter tanpa body Markdown, dan CONTENT-014 menolak body yang ditambahkan kembali. Contoh visual dan struktural adalah `/services/` (`hero-layanan`), bukan `/csms/`.
 
 ## Masalah
 
