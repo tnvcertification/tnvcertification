@@ -1,194 +1,116 @@
-# Language Switcher Icons Implementation Plan
+# Language switcher flags implementation plan
 
-> **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
+> **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:executing-plans or subagent-driven-development. Steps use checkbox (`- [ ]`) syntax for tracking.
 
-**Goal:** Replace the visible ID/EN labels in the header switcher with compact inline SVG globe icons while preserving accessible names, active/disabled semantics, and URL-based behavior.
+**Goal:** Replace the compact globe icons in the header switcher with an Indonesia flag and a United Kingdom flag, keeping accessible names, active/disabled semantics, and URL-based behavior unchanged.
 
-**Architecture:** Only `src/components/LanguageSwitcher.astro` changes in product code. Each option keeps its existing `<a>` / `<span aria-disabled>` structure, classes, and resolver data; the visible `{option.label}` is replaced by an inline SVG globe whose text is the uppercased `option.lang`. The active anchor gets `aria-label={option.label}`; the disabled span keeps the full name plus explanation in its existing `sr-only` text. `site.ts`, the resolver, and the data module stay untouched.
+**Architecture:** `src/components/LanguageSwitcher.astro` keeps its `<nav><ul><li>` structure and imports a small typed `LanguageFlag.astro` component. The new component renders one of two inline SVG flags from a `lang` prop; both branches of the switcher use it. `site.ts`, the resolver, the data module, and all content stay untouched.
 
 **Tech Stack:** Astro 7.4.13, TypeScript 7.1 beta, Tailwind CSS 4.3.5, `node:test`.
 
-**Spec:** `docs/superpowers/specs/2026-11-22-language-switcher-icon-design.md` (approved).
+**Spec:** `docs/superpowers/specs/2026-11-22-language-switcher-icon-design.md` (approved, revised after build review).
+
+## History and deviations
+
+- The original plan replaced visible labels with globe + `ID`/`EN` icons. It was executed as commit `49a02d9` and delivered as PR #23.
+- After reviewing the built header, the owner said the globes looked too similar and chose Indonesia + Union Jack. This plan supersedes the **visual** part of that work; the delivery work continues on the same PR.
+- PR head branch is `feat/language-switcher-icons` (not the earlier `feat/icon-language-switcher`).
+- Fork `main` is used for preview at the owner's explicit request, then re-synced after merge.
+- The native worktree path caused `astro sync` to exit 132 (SIGILL); validation and commits run in the main checkout.
+- Auth uses basic `x-access-token` from `/home/aapanel/.git-pat-skyforgged`; never print the token.
 
 ## Global Constraints
 
-- `site.ts` is the SSOT: labels and UI strings stay there; no hardcoded site-wide copy in components.
-- Accessible name must remain `Bahasa Indonesia` / `English` from `siteSettings.languages`.
-- SVG is decorative inside an already-labelled control: `aria-hidden="true"` and `focusable="false"`.
+- `site.ts` is the SSOT for labels and UI strings; no hardcoded site-wide copy in components. Flag colors are visual assets, not copy.
+- Accessible names remain `Bahasa Indonesia` / `English` from `siteSettings.languages`.
+- SVG is decorative inside an already-labelled control: `aria-hidden="true"` and `focusable="false"` on each SVG.
 - Keep `aria-current="page"`, `aria-disabled="true"`, the `sr-only` unavailable explanation, ≥44px targets, and the existing `border-b-2` treatment.
-- No JavaScript, cookie/localStorage, browser detection, or auto-redirect; no new dependency.
-- Do not change `src/lib/locale-switch.ts`, `src/data/locale-switch.ts`, English fallback stubs, or content collections.
-- Base work on `upstream/main` (`5188edb` or newer), never the divergent local `main`.
-- Fork `main` may be used for preview, but the PR head is a dedicated branch created from that commit.
-- Auth for fork push/PR: basic `x-access-token` from `/home/aapanel/.git-pat-skyforgged`; never print the token.
+- No JavaScript, cookie/localStorage, browser detection, auto-redirect, or new dependency.
+- Base work on `upstream/main` (`5188edb` or newer).
 
 ## Review Focus
 
-- Icon-only anchor with no accessible name → every available option carries `aria-label={option.label}`. Test: Task 1 markup guard.
-- SVG announced as a separate image → every SVG has `aria-hidden="true"` and `focusable="false"`. Test: Task 1 markup guard.
-- Visible full label regresses into the switcher → no `>{option.label}<` in the component. Test: Task 1 markup guard plus dist inspection in Task 1.
-- Disabled state loses its explanation → `sr-only` text remains `{option.label} — {unavailableText}`. Test: Task 1 markup guard plus dist inspection.
-- Wrong branch/base → branch must descend from `upstream/main`, and PR base must be upstream `main`. Test: Task 2 ancestry check and PR verification.
+- No accessible name → available anchor keeps `aria-label={option.label}`; disabled span keeps full name in `sr-only`.
+- SVG announced as an image → every SVG has `aria-hidden="true"` and `focusable="false"`.
+- Globe code regresses → no `<text>`, `toUpperCase()`, `<circle>`, or `<ellipse>` in the flag component.
+- Wrong flag for a language → `LanguageFlag` branches on `lang`, with both color sets present.
+- Wrong branch/base → branch descends from `upstream/main`; PR base is upstream `main` at `5188edb`.
 
 ---
 
-### Task 1: Replace switcher labels with accessible SVG icons
+### Task 1: Replace globe icons with accessible flags
 
 **Files:**
 - Modify: `src/components/LanguageSwitcher.astro`
+- Add: `src/components/LanguageFlag.astro`
 - Test: `tests/language-switcher-markup.test.mjs`
-- Include: `docs/superpowers/specs/2026-11-22-language-switcher-icon-design.md`
 
 **Interfaces:**
-- Consumes: `getLanguageOptions(pathname, lang)` returning `{ lang, label, href, active, available }` in `siteSettings.languages` order; `siteSettings.languageSwitcher.unavailable`.
-- Produces: the same `<nav><ul><li>` structure, with icon-only options and unchanged state attributes/classes.
+- Consumes: `getLanguageOptions(pathname, lang)` returning `{ lang, label, href, active, available }`; `siteSettings.languageSwitcher.unavailable`.
+- Produces: same switcher HTML structure, with one flag SVG per option.
 
-- [ ] **Step 1: Write the failing markup guard test**
+- [x] **Step 1: Write the failing markup guard test**
 
-Create `tests/language-switcher-markup.test.mjs`:
+Replace `tests/language-switcher-markup.test.mjs` with tests that read both components and assert:
+  - `LanguageSwitcher.astro` has no inline `<svg>` and renders `<LanguageFlag lang={option.lang} />` exactly twice;
+  - available anchor keeps `aria-label={option.label}` and no visible `>{option.label}<`;
+  - disabled span keeps `{option.label} — {unavailableText}` in `sr-only`;
+  - `LanguageFlag.astro` has two `<svg>` blocks, equal counts of `aria-hidden="true"` and `focusable="false"`, both flag color sets (`#CE1126`, `#012169`, `#C8102E`), and no globe/text remnants.
 
-```js
-import assert from "node:assert/strict";
-import { readFile } from "node:fs/promises";
-import test from "node:test";
-
-const component = await readFile(
-  new URL("../src/components/LanguageSwitcher.astro", import.meta.url),
-  "utf8",
-);
-
-test("language switcher options are icon-only but keep accessible names", () => {
-  assert.match(component, /aria-label=\{option\.label\}/);
-  assert.match(component, /<svg\b/);
-  assert.match(component, /aria-hidden="true"/);
-  assert.match(component, /focusable="false"/);
-  assert.match(component, /\{option\.lang\.toUpperCase\(\)\}/);
-  assert.doesNotMatch(component, />\{\s*option\.label\s*\}</);
-});
-
-test("disabled option keeps full label and unavailable explanation in sr-only text", () => {
-  assert.match(component, /\{option\.label\} — \{unavailableText\}/);
-});
-```
-
-- [ ] **Step 2: Run the test to verify it fails**
+- [x] **Step 2: Run the test to verify it fails**
 
 Run: `pnpm test`
-Expected: FAIL because `LanguageSwitcher.astro` still renders `{option.label}` visibly and has no `aria-label`, SVG, or `option.lang.toUpperCase()`.
+Expected: FAIL because `LanguageFlag.astro` does not exist and the switcher still contains globe SVGs.
 
-- [ ] **Step 3: Implement the icon markup in `src/components/LanguageSwitcher.astro`**
+- [x] **Step 3: Implement `LanguageFlag.astro`**
 
-Keep the existing `nav`, `ul`, `li`, class lists, `href`, `aria-current`, `aria-disabled`, and focus-visible utilities unchanged. Replace each visible `{option.label}` with this inline SVG, duplicated in both branches:
+Typed `lang: string` prop. Use `lang === "id"` for the red/white flag (`viewBox="0 0 24 12"`) and the Union Jack for every other lang (`viewBox="0 0 60 30"`). Both SVGs use `class="h-5 w-8"`, `aria-hidden="true"`, `focusable="false"`, and a thin `currentColor` outline. No text nodes.
 
-```astro
-<svg viewBox="0 0 24 24" class="h-5 w-5" aria-hidden="true" focusable="false">
-  <circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="1.5" />
-  <ellipse cx="12" cy="12" rx="4" ry="9" fill="none" stroke="currentColor" stroke-width="1.5" />
-  <path d="M3 12h18" fill="none" stroke="currentColor" stroke-width="1.5" />
-  <text x="12" y="15.5" text-anchor="middle" font-size="7" font-weight="700" fill="currentColor">
-    {option.lang.toUpperCase()}
-  </text>
-</svg>
-```
+- [x] **Step 4: Wire the flag into `LanguageSwitcher.astro`**
 
-On the available `<a>`, add `aria-label={option.label}` before `aria-current`. On the disabled `<span>`, do **not** add `aria-label`; replace its current `sr-only` content with `{option.label} — {unavailableText}` after the SVG.
+Import `LanguageFlag`, replace both globe SVG blocks with `<LanguageFlag lang={option.lang} />`, and leave every other attribute, class, and string untouched.
 
-- [ ] **Step 4: Run the tests to verify they pass**
+- [x] **Step 5: Run the tests to verify they pass**
 
 Run: `pnpm test`
-Expected: PASS; the two new tests pass and the existing resolver tests are unchanged.
+Expected: PASS; new guards pass and existing resolver tests are unchanged.
 
-- [ ] **Step 5: Run the full validation and inspect the build**
+- [x] **Step 6: Run the full validation and inspect the build**
 
-Run:
+Run `pnpm check`, `pnpm lint`, `pnpm build`, `pnpm audit:seo`, `pnpm audit:blocks`, `pnpm audit:page-images`.
+Expected: every command exits 0. Inspect `dist/index.html` switcher `<nav>`: active `aria-label` present, one switcher `aria-current="page"`, disabled `aria-disabled="true"` with `English — Terjemahan belum tersedia`, two decorative flag SVGs, no visible full labels, and no switcher href to a fallback stub.
 
-```bash
-pnpm check
-pnpm lint
-pnpm build
-pnpm audit:seo
-pnpm audit:blocks
-pnpm audit:page-images
-```
-
-Expected: every command exits 0. Then verify generated markup:
+- [x] **Step 7: Commit the flag revision**
 
 ```bash
-grep -o 'aria-label="Bahasa Indonesia"' dist/index.html | wc -l
-grep -o 'aria-label="English"' dist/index.html | wc -l
-grep -o 'aria-current="page"' dist/index.html | wc -l
-grep -o 'aria-disabled="true"' dist/index.html | wc -l
-```
-
-Expected: both `aria-label` values are present, exactly one `aria-current="page"` exists, and the disabled option is still present with `aria-disabled="true"` and its `sr-only` explanation. Also confirm no switcher `href` points to a fallback stub.
-
-- [ ] **Step 6: Commit the implementation**
-
-```bash
-git add src/components/LanguageSwitcher.astro tests/language-switcher-markup.test.mjs docs/superpowers/specs/2026-11-22-language-switcher-icon-design.md docs/superpowers/plans/2026-11-22-language-switcher-icons.md
-git commit -m "feat: use compact ID/EN icons in language switcher"
+git add src/components/LanguageSwitcher.astro src/components/LanguageFlag.astro tests/language-switcher-markup.test.mjs docs/superpowers/specs/2026-11-22-language-switcher-icon-design.md docs/superpowers/plans/2026-11-22-language-switcher-icons.md
+git commit -m "feat: use Indonesia and UK flags in language switcher"
 ```
 
 ---
 
-### Task 2: Preview on fork `main`, then open the upstream PR
+### Task 2: Update preview and PR #23
 
 **Files:** None. Git/GitHub delivery only.
 
-**Interfaces:**
-- Consumes: the commit created in Task 1.
-- Produces: fork `main` at the preview commit, branch `feat/icon-language-switcher`, and an open PR to `tnvcertification/tnvcertification` base `main`.
+- [x] **Step 1: Push the revised commit**
 
-- [ ] **Step 1: Prepare fork `main` from upstream**
-
-```bash
-git fetch origin --prune
-git fetch upstream --prune
-git merge-base --is-ancestor origin/main upstream/main
-git switch -c fork-main --track origin/main
-git merge --ff-only upstream/main
-```
-
-Expected: ancestry check exits 0; `fork-main` fast-forwards to `upstream/main`. Do not use the divergent local `main`.
-
-- [ ] **Step 2: Carry the Task 1 commit onto fork `main` and push for preview**
-
-If the Task 1 commit was made on another branch, cherry-pick it onto `fork-main`. Then:
+From `feat/language-switcher-icons`, push the new commit with the temporary token, then fast-forward fork `main` to the same commit for preview:
 
 ```bash
 TOKEN=$(tr -d '\n\r' < /home/aapanel/.git-pat-skyforgged)
-git -c http.extraHeader="AUTHORIZATION: basic $(printf 'x-access-token:%s' "$TOKEN" | base64 -w0)" push origin HEAD:main
-git ls-remote --heads origin main
+AUTH="AUTHORIZATION: basic $(printf 'x-access-token:%s' "$TOKEN" | base64 -w0)"
+git -c http.extraHeader="$AUTH" push origin feat/language-switcher-icons
+git -c http.extraHeader="$AUTH" push origin HEAD:main
+git ls-remote --heads origin main feat/language-switcher-icons
 ```
 
-Expected: fork `main` points at the Task 1 commit. Report the GitHub Actions run URL if the workflow starts; do not claim a CI result while it is still running.
+Expected: both refs equal the new commit.
 
-- [ ] **Step 3: Create the PR head branch**
+- [x] **Step 2: Update PR #23 body/title via API**
 
-```bash
-git switch -c feat/icon-language-switcher
-TOKEN=$(tr -d '\n\r' < /home/aapanel/.git-pat-skyforgged)
-git -c http.extraHeader="AUTHORIZATION: basic $(printf 'x-access-token:%s' "$TOKEN" | base64 -w0)" push -u origin feat/icon-language-switcher
-```
+PATCH `https://api.github.com/repos/tnvcertification/tnvcertification/pulls/23` with a title/body describing flags, not globes, and the fresh validation evidence. Do not open a new PR.
 
-Expected: the new branch points at the same commit as fork `main`.
+- [x] **Step 3: Verify PR and Actions**
 
-- [ ] **Step 4: Open the upstream PR via API**
-
-POST to `https://api.github.com/repos/tnvcertification/tnvcertification/pulls` with:
-
-```json
-{
-  "title": "feat: use compact ID/EN icons in language switcher",
-  "head": "skyforgged:feat/icon-language-switcher",
-  "base": "main",
-  "body": "Replace the long visible ID/EN labels with compact globe icons while keeping full accessible names from site.ts, aria-current, and the disabled state explanation. Validation: pnpm check, lint, test, build, audit:seo, audit:blocks, audit:page-images all pass.",
-  "maintainer_can_modify": false
-}
-```
-
-Use the same basic `x-access-token` auth header. Expected: `state=open`, `base.sha` equals current `upstream/main`, `head.ref` is `feat/icon-language-switcher`.
-
-- [ ] **Step 5: Report and preserve fork `main`**
-
-Report the PR URL and head SHA. Leave fork `main` at the preview commit until the PR is merged; after merge, sync fork `main` with upstream again.
+Confirm PR #23 is `open`, base remains upstream `main` at `5188edb`, head is `feat/language-switcher-icons` at the new SHA. Report the fork Actions run URL; do not claim a CI result while it is still running. After merge, re-sync fork `main` with upstream.

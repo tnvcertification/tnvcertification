@@ -6,16 +6,38 @@ const component = await readFile(
   new URL("../src/components/LanguageSwitcher.astro", import.meta.url),
   "utf8",
 );
+const flag = await readFile(new URL("../src/components/LanguageFlag.astro", import.meta.url), "utf8").catch(
+  () => "",
+);
 
-test("language switcher options are icon-only but keep accessible names", () => {
+test("switcher delegates flag rendering to LanguageFlag", () => {
+  assert.match(component, /import LanguageFlag from "\.\/LanguageFlag\.astro"/);
+  assert.equal((component.match(/<LanguageFlag lang=\{option\.lang\} \/>/g) ?? []).length, 2);
+  assert.doesNotMatch(component, /<svg\b/);
+});
+
+test("available options keep accessible names and no visible label", () => {
   assert.match(component, /aria-label=\{option\.label\}/);
-  assert.match(component, /<svg\b/);
-  assert.match(component, /aria-hidden="true"/);
-  assert.match(component, /focusable="false"/);
-  assert.match(component, /\{option\.lang\.toUpperCase\(\)\}/);
   assert.doesNotMatch(component, />\{\s*option\.label\s*\}</);
 });
 
 test("disabled option keeps full label and unavailable explanation in sr-only text", () => {
   assert.match(component, /\{option\.label\} — \{unavailableText\}/);
+});
+
+test("flags are decorative and use both flag color sets", () => {
+  const svgCount = (flag.match(/<svg\b/g) ?? []).length;
+  assert.equal(svgCount, 2);
+  assert.equal((flag.match(/aria-hidden="true"/g) ?? []).length, svgCount);
+  assert.equal((flag.match(/focusable="false"/g) ?? []).length, svgCount);
+  for (const color of ["#CE1126", "#FFFFFF", "#012169", "#C8102E"]) {
+    assert.ok(flag.includes(color), `missing flag color ${color}`);
+  }
+});
+
+test("flag component branches on lang without globe or text remnants", () => {
+  assert.match(flag, /lang === "id"/);
+  assert.doesNotMatch(flag, /<text\b/);
+  assert.doesNotMatch(flag, /toUpperCase\(\)/);
+  assert.doesNotMatch(flag, /<(?:circle|ellipse)\b/);
 });
