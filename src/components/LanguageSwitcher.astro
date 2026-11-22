@@ -27,6 +27,7 @@ const unavailableText = siteSettings.languageSwitcher.unavailable[uiLang];
           {option.available ? (
             <a
               href={option.href}
+              aria-label={option.label}
               aria-current={option.active ? "page" : undefined}
               class:list={[
                 "inline-flex min-h-11 items-center border-b-2 px-3 py-2 transition-colors",
@@ -36,15 +37,29 @@ const unavailableText = siteSettings.languageSwitcher.unavailable[uiLang];
                   : "border-transparent text-ink-muted hover:border-border-strong hover:text-ink",
               ]}
             >
-              {option.label}
+              <svg viewBox="0 0 24 24" class="h-6 w-6" aria-hidden="true" focusable="false">
+                <circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="1.5" />
+                <ellipse cx="12" cy="12" rx="4" ry="9" fill="none" stroke="currentColor" stroke-width="1.5" />
+                <path d="M3 12h18" fill="none" stroke="currentColor" stroke-width="1.5" />
+                <text x="12" y="15.5" text-anchor="middle" font-size="8" font-weight="700" fill="currentColor">
+                  {option.lang.toUpperCase()}
+                </text>
+              </svg>
             </a>
           ) : (
             <span
               aria-disabled="true"
               class="inline-flex min-h-11 items-center border-b-2 border-transparent px-3 py-2 text-ink-subtle"
             >
-              {option.label}
-              <span class="sr-only"> — {unavailableText}</span>
+              <svg viewBox="0 0 24 24" class="h-6 w-6" aria-hidden="true" focusable="false">
+                <circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="1.5" />
+                <ellipse cx="12" cy="12" rx="4" ry="9" fill="none" stroke="currentColor" stroke-width="1.5" />
+                <path d="M3 12h18" fill="none" stroke="currentColor" stroke-width="1.5" />
+                <text x="12" y="15.5" text-anchor="middle" font-size="8" font-weight="700" fill="currentColor">
+                  {option.lang.toUpperCase()}
+                </text>
+              </svg>
+              <span class="sr-only">{option.label} — {unavailableText}</span>
             </span>
           )}
         </li>
