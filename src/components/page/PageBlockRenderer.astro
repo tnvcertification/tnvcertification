@@ -1,0 +1,64 @@
+---
+import BlockRenderer from "../BlockRenderer.astro";
+import PageHero from "./PageHero.astro";
+import LinkGrid from "./LinkGrid.astro";
+import ContactPanel from "./ContactPanel.astro";
+import type {
+  PageBlock,
+  HeroBlock,
+  LinkGridBlock,
+  ContactBlock,
+} from "../../data/pages";
+
+interface Props {
+  blocks: PageBlock[];
+  fallbackImage: { src: string; alt: string };
+}
+
+type EditorialBlock = Extract<PageBlock, { type: "content-section" | "faq" | "howto" | "cta" }>;
+type RenderGroup =
+  | { kind: "hero"; block: HeroBlock }
+  | { kind: "link-grid"; block: LinkGridBlock }
+  | { kind: "contact"; block: ContactBlock }
+  | { kind: "editorial"; blocks: EditorialBlock[] };
+
+const { blocks, fallbackImage } = Astro.props;
+
+const isEditorial = (block: PageBlock): block is EditorialBlock =>
+  block.type === "content-section" || block.type === "faq" || block.type === "howto" || block.type === "cta";
+
+// Group consecutive editorial blocks so BlockRenderer keeps its surface palette,
+// while hero, link-grid and contact stay in their authored position. Listing
+// blocks are intentionally omitted: each route supplies its own item markup.
+const groups: RenderGroup[] = [];
+for (const block of blocks) {
+  if (block.type === "hero") {
+    groups.push({ kind: "hero", block });
+  } else if (block.type === "link-grid") {
+    groups.push({ kind: "link-grid", block });
+  } else if (block.type === "contact") {
+    groups.push({ kind: "contact", block });
+  } else if (isEditorial(block)) {
+    const previous = groups.at(-1);
+    if (previous?.kind === "editorial") {
+      previous.blocks.push(block);
+    } else {
+      groups.push({ kind: "editorial", blocks: [block] });
+    }
+  }
+}
+---
+
+<div class="space-y-10 sm:space-y-14">
+  {groups.map((group) => (
+    group.kind === "hero" ? (
+      <PageHero block={group.block} fallbackImage={fallbackImage} />
+    ) : group.kind === "link-grid" ? (
+      <LinkGrid block={group.block} />
+    ) : group.kind === "contact" ? (
+      <ContactPanel block={group.block} />
+    ) : (
+      <BlockRenderer blocks={group.blocks} lang="id" />
+    )
+  ))}
+</div>

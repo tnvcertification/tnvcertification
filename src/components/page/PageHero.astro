@@ -1,0 +1,22 @@
+---
+import MainMenuHero from "../MainMenuHero.astro";
+import type { HeroBlock } from "../../data/pages";
+
+interface Props {
+  block: HeroBlock;
+  fallbackImage: { src: string; alt: string };
+}
+
+const { block, fallbackImage } = Astro.props;
+---
+
+<div id={block.id}>
+  <MainMenuHero
+    eyebrow={block.eyebrow}
+    title={block.title}
+    description={block.description ?? ""}
+    image={block.image ?? fallbackImage.src}
+    imageAlt={block.imageAlt ?? fallbackImage.alt}
+    imagePriority
+  />
+</div>

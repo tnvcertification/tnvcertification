@@ -1,0 +1,37 @@
+---
+import Section from "../Section.astro";
+import type { ListingBlock } from "../../data/pages";
+
+interface Props {
+  block: ListingBlock;
+  hasItems: boolean;
+}
+
+const { block, hasItems } = Astro.props;
+const headingId = block.title && block.id ? `${block.id}-heading` : undefined;
+const EmptyHeading = block.title ? "h3" : "h2";
+const emptyTitle = block.emptyTitle;
+const emptyDescription = block.emptyDescription;
+---
+
+<Section id={block.id} aria-labelledby={headingId} spacing={block.source === "articles" ? "spacious" : "default"}>
+  {block.eyebrow && <p class="text-xs font-semibold uppercase tracking-[0.12em] text-brand-deepblue">{block.eyebrow}</p>}
+  {block.title && <h2 id={headingId} class="mt-2 text-2xl font-semibold tracking-tight text-ink">{block.title}</h2>}
+  {block.description && <p class="mt-3 max-w-3xl leading-relaxed text-ink-muted">{block.description}</p>}
+
+  {hasItems ? (
+    <div class="mt-6"><slot /></div>
+  ) : (
+    <div class="mt-6 max-w-3xl border-y border-border py-8">
+      {emptyTitle && <EmptyHeading class="text-xl font-semibold tracking-tight text-ink">{emptyTitle}</EmptyHeading>}
+      {emptyDescription && <p class="mt-3 leading-relaxed text-ink-muted">{emptyDescription}</p>}
+      {block.emptyActionHref && block.emptyActionLabel && (
+        <a href={block.emptyActionHref} class="mt-5 inline-flex min-h-11 items-center font-semibold text-brand-deepblue underline underline-offset-4 hover:text-brand-blue focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-blue">{block.emptyActionLabel}</a>
+      )}
+    </div>
+  )}
+
+  {block.actionHref && block.actionLabel && (
+    <a href={block.actionHref} class="mt-6 inline-flex min-h-11 items-center text-sm font-semibold text-brand-deepblue underline underline-offset-4 hover:text-brand-blue focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-blue">{block.actionLabel}</a>
+  )}
+</Section>

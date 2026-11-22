@@ -1,0 +1,49 @@
+---
+import Section from "../Section.astro";
+import { organization } from "../../site";
+import type { ContactBlock } from "../../data/pages";
+
+interface Props {
+  block: ContactBlock;
+}
+
+const { block } = Astro.props;
+const { email, phone, whatsapp, address, addressLabels } = organization.contact;
+const fullAddress = [
+  address.street,
+  address.city,
+  address.province,
+  address.postalCode,
+  addressLabels.country,
+].filter(Boolean).join(", ");
+const labels = {
+  email: block.labels?.email ?? "Email",
+  phone: block.labels?.phone ?? "Telepon",
+  address: block.labels?.address ?? "Alamat",
+};
+const headingId = block.id ? `${block.id}-heading` : undefined;
+---
+
+<Section id={block.id} aria-labelledby={headingId} spacing="spacious">
+  {block.eyebrow && <p class="text-xs font-semibold uppercase tracking-[0.14em] text-brand-deepblue">{block.eyebrow}</p>}
+  <h2 id={headingId} class="mt-2 text-2xl font-semibold tracking-tight text-ink">{block.title}</h2>
+  {block.description && <p class="mt-3 max-w-3xl leading-relaxed text-ink-muted">{block.description}</p>}
+
+  <address class="mt-7 grid gap-6 border-t border-border pt-6 not-italic sm:grid-cols-3">
+    <div>
+      <p class="text-xs font-semibold uppercase tracking-[0.12em] text-ink-subtle">{labels.email}</p>
+      <a href={`mailto:${email}`} class="mt-2 inline-flex min-h-11 items-center break-all font-medium text-brand-deepblue underline underline-offset-4 hover:text-brand-blue focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-blue">{email}</a>
+    </div>
+    <div>
+      <p class="text-xs font-semibold uppercase tracking-[0.12em] text-ink-subtle">{labels.phone}</p>
+      <a href={`tel:${phone.replace(/[^+\d]/g, "")}`} class="mt-2 inline-flex min-h-11 items-center font-medium text-brand-deepblue underline underline-offset-4 hover:text-brand-blue focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-blue">{phone}</a>
+      {whatsapp && whatsapp !== phone && (
+        <p class="mt-1 text-sm text-ink-muted">WhatsApp: {whatsapp}</p>
+      )}
+    </div>
+    <div>
+      <p class="text-xs font-semibold uppercase tracking-[0.12em] text-ink-subtle">{labels.address}</p>
+      <p class="mt-2 max-w-md leading-relaxed text-ink">{fullAddress}</p>
+    </div>
+  </address>
+</Section>
