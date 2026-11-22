@@ -41,3 +41,16 @@ test("flag component branches on lang without globe or text remnants", () => {
   assert.doesNotMatch(flag, /toUpperCase\(\)/);
   assert.doesNotMatch(flag, /<(?:circle|ellipse)\b/);
 });
+
+test("flags render at 24x16", () => {
+  assert.equal((flag.match(/class="h-4 w-6"/g) ?? []).length, 2);
+  assert.doesNotMatch(flag, /h-5 w-8/);
+});
+
+test("switcher keeps 44px targets while tightening flag spacing", () => {
+  assert.match(component, /class="flex items-center gap-0 text-sm font-semibold"/);
+  assert.equal((component.match(/px-2\.5/g) ?? []).length, 2);
+  assert.equal((component.match(/min-h-11/g) ?? []).length, 2);
+  assert.doesNotMatch(component, /gap-1/);
+  assert.doesNotMatch(component, /px-3/);
+});

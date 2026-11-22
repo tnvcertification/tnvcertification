@@ -114,3 +114,7 @@ PATCH `https://api.github.com/repos/tnvcertification/tnvcertification/pulls/23` 
 - [x] **Step 3: Verify PR and Actions**
 
 Confirm PR #23 is `open`, base remains upstream `main` at `5188edb`, head is `feat/language-switcher-icons` at the new SHA. Report the fork Actions run URL; do not claim a CI result while it is still running. After merge, re-sync fork `main` with upstream.
+
+## Revision 2: smaller flags and tighter spacing
+
+After another build review, the owner asked for 24×16 flags and less padding between `id` and `en`. Executed with TDD: two failing guards were added, then `LanguageFlag.astro` changed from `h-5 w-8` to `h-4 w-6`, and `LanguageSwitcher.astro` changed from `gap-1`/`px-3` to `gap-0`/`px-2.5`. `min-h-11` remains, and 24px + 2×10px keeps each option 44px wide. Spec updated. Validation and PR delivery repeated on the new commit.

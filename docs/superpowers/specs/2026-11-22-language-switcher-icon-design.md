@@ -46,8 +46,9 @@ The owner found `Bahasa Indonesia` and `English` too long in the header. A first
 - `LanguageFlag.astro` takes a `lang: string` prop: `lang === "id"` renders the red/white Indonesia flag (`viewBox="0 0 24 12"`); every other lang renders the Union Jack (`viewBox="0 0 60 30"`).
 - ID flag: red `#CE1126` upper band, white `#FFFFFF` lower band, and a thin `currentColor` outline so the white band is visible on light headers.
 - EN flag: simplified Union Jack using blue `#012169`, white `#FFFFFF`, and red `#C8102E`, plus the same thin outline.
-- Both SVGs: `class="h-5 w-8"`, `aria-hidden="true"`, `focusable="false"`. No text nodes, no `toUpperCase()`, no globe shapes.
-- The markup guard test checks that the switcher has no inline SVG and uses the flag component twice; that the flag component has two decorative SVGs with both color sets; and that accessible names and visible-label absence still hold.
+- Both SVGs: `class="h-4 w-6"` (24×16 CSS box), `aria-hidden="true"`, `focusable="false"`. The 2:1 flag art is letterboxed vertically by the SVG default `preserveAspectRatio`, so it stays undistorted. No text nodes, no `toUpperCase()`, no globe shapes.
+- After build review, the owner asked for a smaller flag and tighter spacing: the switcher uses `gap-0` and `px-2.5`. With a 24px flag and 10px padding per side, each option is 44px wide and keeps `min-h-11` for a 44px-tall target; the visual gap between flags drops from 28px to 20px.
+- The markup guard test checks that the switcher has no inline SVG and uses the flag component twice; that the flag component has two decorative SVGs with both color sets; that sizes and spacing match; and that accessible names and visible-label absence still hold.
 
 ## Delivery workflow
 
