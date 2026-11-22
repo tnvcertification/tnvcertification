@@ -12,6 +12,10 @@ Both languages are supported consistently across page content, frontmatter, bloc
 - Translations should preserve meaning and structural parity, but may use idiomatic wording.
 - Validate title, description, slug, language, and translation key with collection schemas.
 
+## Page entries (development mode)
+
+Page entries are ID-only in this phase. There are no translated `pages` entries yet; `/en/...` pages are redirect stubs to the Indonesian route. Do not add `lang: "en"` page entries or duplicate page copy in route files while this combined pattern is being evaluated.
+
 ## UI and blocks
 - Localize every user-facing string; pass labels/copy through props or a translation dictionary.
 - Block identifiers may be language-neutral; all visible text, labels, alt text, and metadata must be localized.

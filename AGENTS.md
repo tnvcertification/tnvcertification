@@ -17,6 +17,17 @@ Build and maintain the PT. Intiprima Sertifikasi website as a polished, content-
 - Use stable canonical identifiers/relationships; do not infer relationships from labels, categories, or similar-looking slugs.
 - Keep Service, Training, Schedule, Article, and Category as distinct content entities. A schedule must reference its training; service association is optional and explicit.
 
+## Page content source of truth (development mode)
+
+This combined pattern is still in development and is not a final architecture decision. It borrows the markdown-page approach from the reference project while keeping the existing routes, navigation, validation, and `site.ts` SSOT intact.
+
+- Editorial copy for the main page surfaces (`home`, `services`, `csms`, `about-us`, `trainings`, `schedules`, `articles`) lives in `src/content/pages/*.md`; `.astro` files must not own editorial page copy.
+- Astro routes only resolve the entry, pass dynamic data (services, trainings, schedules, articles) into blocks, and choose layout/presentation. Dynamic records stay in their own collections; do not duplicate them into page frontmatter.
+- `site.ts` remains the single source of truth for company identity, contact details, navigation, and shared settings. Page frontmatter must not duplicate those values; components read them from `site.ts`.
+- `src/data/pages.ts` exports the shared selectors and `routeOwnedPageSlugs`; dedicated routes own their slugs and the generic `[slug].astro` must skip them.
+- Blocks are discriminated and typed: `hero`, `link-grid`, `listing`, `contact`, plus the existing `content-section`, `faq`, `howto`, and `cta`. See `docs/components-blocks-layouts.md`.
+- Page entries are ID-only in this phase; English fallbacks are redirect stubs, not translated page entries.
+
 ## Mandatory editorial content rules
 - Every publishable content entry must have an introductory paragraph directly after its H1. The intro is exactly one paragraph and must explain the page title, beginning with the title followed by `adalah ...` (for example, `Sertifikasi ISO 9001 adalah ...`). Do not use generic or repeated intro copy across unrelated pages.
 - `metaDescription` is a required, separate SEO field. It must be unique, persuasive, relevant to the page, and must not duplicate the intro or featured-image alt text.

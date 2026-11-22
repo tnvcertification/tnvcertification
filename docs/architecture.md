@@ -105,6 +105,15 @@ All layouts and reusable blocks must consume the shared design system rather tha
 - Keep content authoring straightforward for Markdown editors.
 - Components should receive explicit typed props rather than reaching into unrelated global state.
 
+## Page entries in development mode
+
+Main-menu and corporate page copy is authored in `src/content/pages/*.md` and selected through `src/data/pages.ts`. `routeOwnedPageSlugs` marks the slugs served by dedicated routes (`home`, `services`, `csms`, `trainings`, `schedules`, `articles`), so the generic `[slug].astro` does not emit duplicate paths. Routes resolve an entry, hand dynamic collections to `listing` blocks, and pass remaining blocks to the page block renderer. This pattern is provisional and preserves the existing route, navigation, and SSOT structure.
+
+- `getPageEntry`, `getPageHero`, and `getPageBlocks` are the selectors routes use for page copy.
+- Listing blocks describe their source and empty-state copy only; the route supplies cards/rows from the canonical collection.
+- Company identity and contact values still come from `site.ts`; `contact` blocks carry only editorial labels and description text.
+- Page entries are ID-only in this phase; EN paths are redirect stubs, and `routeOwnedPageSlugs` is also filtered out of the fallback generator.
+
 ## Shared content blocks across Service, Schedule, and Article
 
 Service, Schedule, and Article content types may all use FAQ, HowTo, and CTA blocks. These are reusable content capabilities, not features exclusive to a single collection or layout. Their presence is optional and determined by the editorial purpose of each page.

@@ -10,6 +10,17 @@
 - Blocks enable flexible section order when useful, but should not become a universal abstraction.
 - Page composition may combine blocks and fixed layout elements.
 
+### Page structure blocks (development mode)
+
+`src/content/pages/*.md` may compose these page-structure blocks in addition to the shared `content-section`, `faq`, `howto`, and `cta` blocks:
+
+- `hero`: eyebrow, title, description, and optional image/alt; `PageHero` falls back to the entry's featured image.
+- `link-grid`: a short set of curated internal links with per-item eyebrow, title, description, and action label; rendered by `LinkGrid`.
+- `listing`: a source selector (`services`, `trainings`, `schedules`, `articles`) plus heading and empty-state copy; `ListingSection` renders the shell while the route supplies item markup from the canonical collection.
+- `contact`: heading, description, and label overrides; `ContactPanel` always reads email, phone, and address from `site.ts`.
+
+This combined page pattern is provisional; do not treat it as a final universal layout abstraction.
+
 ## Layouts
 - Choose layouts by page purpose, not convenience.
 - Certification, article, training, schedule, and corporate pages should have distinct hierarchies and layouts.
