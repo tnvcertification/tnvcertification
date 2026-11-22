@@ -48,6 +48,13 @@ export const siteSettings = {
     { code: "id", label: "Bahasa Indonesia" },
     { code: "en", label: "English" },
   ],
+  languageSwitcher: {
+    ariaLabel: { id: "Pilih bahasa", en: "Language" },
+    unavailable: {
+      id: "Terjemahan belum tersedia",
+      en: "Translation not available",
+    },
+  },
 } as const;
 
 export const primaryNavigation = [
