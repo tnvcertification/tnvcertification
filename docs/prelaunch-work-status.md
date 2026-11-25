@@ -6,7 +6,7 @@
 - Base branch: `main`
 - Completed audit branch: `prep/site-identity-taxonomy-audit` (merged via PR #3)
 - Completed implementation branch: `feat/bilingual-service-taxonomy` (merged at `736bd14`)
-- Validated commit: working tree after `665462f` (full gate suite; English main-menu pages, PR #37/#38/#39 merged, section JSON-LD and CI step-order revisions applied)
+- Validated commit: working tree after `b14c224` (full gate suite; English main-menu pages, PR #37/#38/#39/#40 merged, section JSON-LD, CI step-order, and compiler-binding pin revisions applied)
 
 Permanent rule: internal service-status copy — `Status pengembangan layanan`, `Status layanan`, `Service development status`, and every variant — is prohibited in all content, published or draft. Validators, tests, plans, and specs must not require or generate these blocks. Historical mentions in this file are incident records, not instructions.
 
@@ -59,6 +59,7 @@ The audit branch was merged into `main` by PR #3 (`ab54c88`).
 | P25 | Full English main-menu pages | Completed; all seven English menu routes are real indexable pages, translated trainings/schedules/articles landed, full gate suite passed on `11efb5c` |
 | P26 | Schema.org PR #37/#38 | Completed; invalid `CourseInstance`/`Organization` fields fixed, section JSON-LD anchored to rendered IDs, full gate suite passed on `5f886f2` |
 | P27 | Quality gates ordering | Completed; PR #39 moved `pnpm build` before dist-dependent `pnpm test`, exact-step regression test added, full gate suite passed on `665462f` |
+| P28 | Native compiler binding pin | Completed; PR #40 pinned `@astrojs/compiler-binding` to `0.5.2`, incident record corrected, full gate suite passed on `b14c224` |
 | Build strategy | Content-first full-build baseline | Verification checkpoint closed for current baseline; timing baseline captured, negative preflight verified in CI; full checks mandatory |
 
 ## Verified repository facts
@@ -781,4 +782,27 @@ Full gate suite passed locally on `main` after merge and test correction with No
 | `pnpm audit:headings` | PASS, exit `0`, 94 HTML pages |
 
 CI status for `665462f` is not claimed here. Visual and keyboard review remain manual tasks.
+
+## P28 — Native compiler binding pin (2026-11-25)
+
+- GitHub PR #40 (`54a740b`) pins `@astrojs/compiler-binding` to `0.5.2` in `pnpm-workspace.yaml` and updates `pnpm-lock.yaml`. Its head check run completed with `success`. No source, content, route, or schema files changed.
+- Local `pnpm install --frozen-lockfile` exited `0`. `pnpm why @astrojs/compiler-binding` reported only `0.5.2`; the linked native binary in that dependency path is version `0.5.2`.
+- Review found unsupported wording in the incident record. Follow-up commit `b14c224` moved the incident detail to `docs/agent-operational-memory.md`, narrowed the verified version claim to `0.5.3` failing and `0.5.2` loading, and removed the claim that worktree `node_modules` links to the main checkout. That claim was contradicted by separate worktree binaries with different inodes.
+- No site output change is expected from this dependency pin. Visual and keyboard review remain manual.
+
+Full gate suite passed locally on `main` after merge and documentation correction with Node.js `26.13.1`. Each command ran separately:
+
+| Command | Result |
+|---|---|
+| `pnpm check` | PASS, exit `0` |
+| `pnpm build` | PASS, exit `0`, 91 pages |
+| `pnpm typecheck` | PASS, exit `0` |
+| `pnpm lint` | PASS, exit `0` |
+| `pnpm test` | PASS, exit `0`, 579 tests |
+| `pnpm audit:seo` | PASS, exit `0`, 94 HTML pages and 76 unique canonicals |
+| `pnpm audit:blocks` | PASS, exit `0`, 114 sections in 45 pages |
+| `pnpm audit:page-images` | PASS, exit `0`, 76 generated URLs |
+| `pnpm audit:headings` | PASS, exit `0`, 94 HTML pages |
+
+CI status for `b14c224` is not claimed here.
 
