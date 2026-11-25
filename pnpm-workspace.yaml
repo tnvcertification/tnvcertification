@@ -1,4 +1,7 @@
 minimumReleaseAge: 0
 
+overrides:
+  "@astrojs/compiler-binding": "0.5.2"
+
 allowBuilds:
   esbuild: true
