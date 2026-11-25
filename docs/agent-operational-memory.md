@@ -31,3 +31,10 @@ This file records the operational conventions established during repeated merge 
 - `docs/prelaunch-work-status.md` is the master status file. After each merge, update the validated commit, roadmap row, validation table, and phase section.
 - The validation table must match the fresh command output from that merge, including test count and page count.
 - Historical phase documents may keep their original wording unless the current change makes a claim false.
+
+## Native compiler binding pin
+
+- `pnpm-workspace.yaml` overrides `@astrojs/compiler-binding` to `0.5.2`. `pnpm-lock.yaml` matches that pin. Keep the override in `pnpm-workspace.yaml`; pnpm 12 ignores `pnpm.overrides` in `package.json`.
+- Incident observed on Intel Xeon E5-1410 v2: loading `@astrojs/compiler-binding-linux-x64-gnu@0.5.3` caused `Illegal instruction` (SIGILL, status 132) during `astro sync`, `astro build`, and gate commands. Version `0.5.2` loads on that host. Do not claim a verified range beyond those two versions.
+- Do not rely on a path-based workaround. A native OpenCode worktree had its own `node_modules` and its own native binary inode, separate from the main checkout. Verify the resolved version in the checkout being validated.
+- After a toolchain change, run `pnpm install --frozen-lockfile`, confirm `pnpm why @astrojs/compiler-binding` reports `0.5.2`, then rerun the full gate before attributing a SIGILL to site code.

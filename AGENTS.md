@@ -65,12 +65,7 @@ This combined pattern is still in development and is not a final architecture de
 - Tailwind is the primary styling tool. Use CSS custom properties for design tokens and scoped CSS for distinctive complex visuals when utilities are not the clearest choice.
 - Do not introduce Bootstrap, generic UI kits, or heavy client-side frameworks without an explicit architectural decision.
 
-### Native compiler binding incident (2026-11-25)
-- Symptom: `astro sync`, `astro build`, `pnpm check`, and the full gate exited with `Illegal instruction` (SIGILL, status 132) on a host whose CPU lacks AVX2/BMI (observed on Intel Xeon E5-1410 v2). Loading `astro.linux-x64-gnu.node` by itself reproduced the crash.
-- Root cause: `@astrojs/compiler-binding-linux-x64-gnu@0.5.3` contains BMI1/BMI2 instructions that the host cannot execute. Versions 0.4.1 through 0.5.2 load on that CPU. The separate `@bruits/satteri-linux-x64-gnu` binding is unaffected.
-- Resolution: `pnpm-workspace.yaml` overrides `@astrojs/compiler-binding` to `0.5.2`, and `pnpm-lock.yaml` is updated to match. Keep the override in `pnpm-workspace.yaml`; pnpm 12 ignores `pnpm.overrides` in `package.json`.
-- Earlier workaround: validation and commits were run from the main checkout instead of the native worktree. That path-based workaround is obsolete because the worktree `node_modules` links to the main checkout, so both paths resolve the same binding.
-- If SIGILL appears again, verify the resolved binding version and the platform binary before changing site code. Confirm the pin with `pnpm install --frozen-lockfile` and a full gate run.
+- Native `@astrojs/compiler-binding` is pinned in `pnpm-workspace.yaml`; incident details and re-check steps are in `docs/agent-operational-memory.md`.
 
 ## Content architecture
 - Keep content, data, validation, presentation, composition, and layout responsibilities separate.
